@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.chart.*?>
+
+<BorderPane prefWidth="1400" prefHeight="900" style="-fx-background-color: #0d1117;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tradingdemo.controller.TradingController">
+    
+    <!-- Top Navigation Bar -->
+    <top>
+        <HBox spacing="15" style="-fx-background-color: #161b22; -fx-padding: 12;">
+            <Button fx:id="backButton" text="Back to Dashboard" style="-fx-padding: 10 20; -fx-background-color: #21262d; -fx-text-fill: #c9d1d9; -fx-cursor: hand; -fx-border-color: #30363d; -fx-border-radius: 6; -fx-background-radius: 6; -fx-font-size: 13;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label text="CRYPTO TRADING TERMINAL" style="-fx-text-fill: #58a6ff; -fx-font-size: 18; -fx-font-weight: bold;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="balanceHeaderLabel" text="Balance: 1000.00 USD" style="-fx-text-fill: #56d364; -fx-font-size: 14; -fx-font-weight: bold;"/>
+        </HBox>
+    </top>
+
+    <!-- Main Content Area -->
+    <center>
+        <SplitPane dividerPositions="0.65" style="-fx-background-color: #0d1117;">
+            
+            <!-- Left: Chart and Market Data -->
+            <VBox spacing="0" style="-fx-background-color: #0d1117;">
+                
+                <!-- Crypto Selector Tabs -->
+                <HBox spacing="8" style="-fx-background-color: #161b22; -fx-padding: 10;">
+                    <Label text="Markets:" style="-fx-text-fill: #8b949e; -fx-font-size: 12;"/>
+                    <Button fx:id="btcButton" text="BTC/USD" style="-fx-padding: 8 15; -fx-background-color: #1f6feb; -fx-text-fill: white; -fx-cursor: hand; -fx-border-radius: 6; -fx-background-radius: 6; -fx-font-weight: bold;"/>
+                    <Button fx:id="ethButton" text="ETH/USD" style="-fx-padding: 8 15; -fx-background-color: #21262d; -fx-text-fill: #c9d1d9; -fx-cursor: hand; -fx-border-radius: 6; -fx-background-radius: 6;"/>
+                    <Button fx:id="bnbButton" text="BNB/USD" style="-fx-padding: 8 15; -fx-background-color: #21262d; -fx-text-fill: #c9d1d9; -fx-cursor: hand; -fx-border-radius: 6; -fx-background-radius: 6;"/>
+                    <Button fx:id="adaButton" text="ADA/USD" style="-fx-padding: 8 15; -fx-background-color: #21262d; -fx-text-fill: #c9d1d9; -fx-cursor: hand; -fx-border-radius: 6; -fx-background-radius: 6;"/>
+                    <Button fx:id="solButton" text="SOL/USD" style="-fx-padding: 8 15; -fx-background-color: #21262d; -fx-text-fill: #c9d1d9; -fx-cursor: hand; -fx-border-radius: 6; -fx-background-radius: 6;"/>
+                    <Button fx:id="xrpButton" text="XRP/USD" style="-fx-padding: 8 15; -fx-background-color: #21262d; -fx-text-fill: #c9d1d9; -fx-cursor: hand; -fx-border-radius: 6; -fx-background-radius: 6;"/>
+                </HBox>
+
+                <!-- Price Header -->
+                <HBox spacing="20" style="-fx-background-color: #161b22; -fx-padding: 15; -fx-border-color: #30363d; -fx-border-width: 0 0 1 0;">
+                    <VBox spacing="2">
+                        <Label fx:id="selectedSymbolLabel" text="BTC/USD" style="-fx-text-fill: #c9d1d9; -fx-font-size: 14; -fx-font-weight: bold;"/>
+                        <Label text="Bitcoin" style="-fx-text-fill: #8b949e; -fx-font-size: 11;"/>
+                    </VBox>
+                    <VBox spacing="2">
+                        <Label fx:id="currentPriceLabel" text="45234.50" style="-fx-text-fill: #c9d1d9; -fx-font-size: 24; -fx-font-weight: bold;"/>
+                        <Label fx:id="priceChangeLabel" text="2.34 percent" style="-fx-text-fill: #56d364; -fx-font-size: 12;"/>
+                    </VBox>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <VBox spacing="5">
+                        <HBox spacing="10">
+                            <VBox spacing="2">
+                                <Label text="24h High" style="-fx-text-fill: #8b949e; -fx-font-size: 10;"/>
+                                <Label fx:id="highLabel" text="46123.00" style="-fx-text-fill: #56d364; -fx-font-size: 12; -fx-font-weight: bold;"/>
+                            </VBox>
+                            <VBox spacing="2">
+                                <Label text="24h Low" style="-fx-text-fill: #8b949e; -fx-font-size: 10;"/>
+                                <Label fx:id="lowLabel" text="44567.00" style="-fx-text-fill: #f85149; -fx-font-size: 12; -fx-font-weight: bold;"/>
+                            </VBox>
+                            <VBox spacing="2">
+                                <Label text="24h Volume" style="-fx-text-fill: #8b949e; -fx-font-size: 10;"/>
+                                <Label fx:id="volumeLabel" text="1.2B" style="-fx-text-fill: #58a6ff; -fx-font-size: 12; -fx-font-weight: bold;"/>
+                            </VBox>
+                        </HBox>
+                    </VBox>
+                </HBox>
+
+                <!-- Price Chart -->
+                <VBox VBox.vgrow="ALWAYS" style="-fx-background-color: #0d1117; -fx-padding: 15;">
+                    <LineChart fx:id="priceChart" VBox.vgrow="ALWAYS" style="-fx-background-color: #0d1117; -fx-padding: 10;" animated="true" createSymbols="false" legendVisible="false">
+                        <xAxis>
+                            <CategoryAxis side="BOTTOM" style="-fx-tick-label-fill: #8b949e; -fx-font-size: 10;"/>
+                        </xAxis>
+                        <yAxis>
+                            <NumberAxis side="LEFT" style="-fx-tick-label-fill: #8b949e; -fx-font-size: 10;"/>
+                        </yAxis>
+                    </LineChart>
+                </VBox>
+
+                <!-- Market Stats -->
+                <HBox style="-fx-background-color: #161b22; -fx-padding: 15; -fx-border-color: #30363d; -fx-border-width: 1 0 0 0;" spacing="30">
+                    <VBox spacing="2">
+                        <Label text="Market Cap" style="-fx-text-fill: #8b949e; -fx-font-size: 11;"/>
+                        <Label fx:id="marketCapLabel" text="850.2B" style="-fx-text-fill: #c9d1d9; -fx-font-size: 11; -fx-font-weight: bold;"/>
+                    </VBox>
+                    <VBox spacing="2">
+                        <Label text="Supply" style="-fx-text-fill: #8b949e; -fx-font-size: 11;"/>
+                        <Label fx:id="supplyLabel" text="19.5M" style="-fx-text-fill: #c9d1d9; -fx-font-size: 11; -fx-font-weight: bold;"/>
+                    </VBox>
+                    <VBox spacing="2">
+                        <Label text="All Time High" style="-fx-text-fill: #8b949e; -fx-font-size: 11;"/>
+                        <Label fx:id="athLabel" text="69000.00" style="-fx-text-fill: #c9d1d9; -fx-font-size: 11; -fx-font-weight: bold;"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+
+            <!-- Right: Trading Panel -->
+            <VBox spacing="0" style="-fx-background-color: #161b22;" minWidth="400">
+                
+                <!-- Order Form -->
+                <VBox spacing="12" style="-fx-padding: 20; -fx-background-color: #161b22;">
+                    <Label text="Place Order" style="-fx-text-fill: #58a6ff; -fx-font-size: 16; -fx-font-weight: bold;"/>
+
+                    <!-- Buy/Sell Toggle -->
+                    <HBox spacing="5">
+                        <ToggleButton fx:id="buyToggle" text="BUY" style="-fx-padding: 10; -fx-pref-width: 150; -fx-background-color: #238636; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand; -fx-border-radius: 6; -fx-background-radius: 6;" selected="true"/>
+                        <ToggleButton fx:id="sellToggle" text="SELL" style="-fx-padding: 10; -fx-pref-width: 150; -fx-background-color: #da3633; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand; -fx-border-radius: 6; -fx-background-radius: 6;"/>
+                    </HBox>
+
+                    <!-- Hidden symbol combo - controlled by tabs -->
+                    <ComboBox fx:id="symbolCombo" visible="false" managed="false"/>
+                    <ComboBox fx:id="sideCombo" visible="false" managed="false"/>
+
+                    <!-- Order Type -->
+                    <VBox spacing="5">
+                        <Label text="Order Type" style="-fx-text-fill: #8b949e; -fx-font-size: 11;"/>
+                        <ComboBox fx:id="orderTypeCombo" style="-fx-background-color: #0d1117; -fx-text-fill: #c9d1d9; -fx-pref-width: 310; -fx-padding: 8;"/>
+                    </VBox>
+
+                    <!-- Price Input -->
+                    <VBox spacing="5">
+                        <Label text="Price USD" style="-fx-text-fill: #8b949e; -fx-font-size: 11;"/>
+                        <TextField fx:id="priceField" promptText="Enter price" style="-fx-background-color: #0d1117; -fx-text-fill: #c9d1d9; -fx-prompt-text-fill: #6e7681; -fx-padding: 10; -fx-border-color: #30363d; -fx-border-radius: 6; -fx-background-radius: 6;"/>
+                    </VBox>
+
+                    <!-- Quantity Input -->
+                    <VBox spacing="5">
+                        <Label fx:id="quantityUnitLabel" text="Quantity BTC" style="-fx-text-fill: #8b949e; -fx-font-size: 11;"/>
+                        <TextField fx:id="quantityField" promptText="Enter quantity" style="-fx-background-color: #0d1117; -fx-text-fill: #c9d1d9; -fx-prompt-text-fill: #6e7681; -fx-padding: 10; -fx-border-color: #30363d; -fx-border-radius: 6; -fx-background-radius: 6;"/>
+                    </VBox>
+
+                    <!-- Advanced Options -->
+                    <TitledPane text="Advanced Options (Stop Loss / Take Profit)" style="-fx-text-fill: #58a6ff; -fx-background-color: #0d1117; -fx-font-weight: bold;" collapsible="true" expanded="true">
+                        <VBox spacing="10" style="-fx-padding: 10; -fx-background-color: #161b22;">
+                            <VBox spacing="5">
+                                <Label text="Stop Loss (Optional)" style="-fx-text-fill: #f85149; -fx-font-size: 11; -fx-font-weight: bold;"/>
+                                <TextField fx:id="stopLossField" promptText="Enter stop loss price" style="-fx-background-color: #0d1117; -fx-text-fill: #c9d1d9; -fx-prompt-text-fill: #6e7681; -fx-padding: 8; -fx-border-color: #30363d; -fx-border-radius: 6; -fx-background-radius: 6;"/>
+                                <Label text="Price below which order automatically sells" style="-fx-text-fill: #6e7681; -fx-font-size: 9;"/>
+                            </VBox>
+                            <VBox spacing="5">
+                                <Label text="Take Profit (Optional)" style="-fx-text-fill: #56d364; -fx-font-size: 11; -fx-font-weight: bold;"/>
+                                <TextField fx:id="takeProfitField" promptText="Enter take profit price" style="-fx-background-color: #0d1117; -fx-text-fill: #c9d1d9; -fx-prompt-text-fill: #6e7681; -fx-padding: 8; -fx-border-color: #30363d; -fx-border-radius: 6; -fx-background-radius: 6;"/>
+                                <Label text="Price above which order automatically sells" style="-fx-text-fill: #6e7681; -fx-font-size: 9;"/>
+                            </VBox>
+                        </VBox>
+                    </TitledPane>
+
+                    <!-- Total Display -->
+                    <VBox spacing="5" style="-fx-background-color: #0d1117; -fx-padding: 12; -fx-border-color: #30363d; -fx-border-radius: 6; -fx-background-radius: 6;">
+                        <HBox spacing="10">
+                            <Label text="Total:" style="-fx-text-fill: #8b949e; -fx-font-size: 12;"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label fx:id="totalCostLabel" text="0.00 USD" style="-fx-text-fill: #58a6ff; -fx-font-size: 16; -fx-font-weight: bold;"/>
+                        </HBox>
+                        <Label fx:id="availableBalanceLabel" text="Available: 1000.00 USD" style="-fx-text-fill: #6e7681; -fx-font-size: 10;"/>
+                    </VBox>
+
+                    <!-- Place Order Button -->
+                    <Button fx:id="placeOrderButton" text="PLACE BUY ORDER" style="-fx-padding: 14; -fx-font-size: 14; -fx-font-weight: bold; -fx-background-color: #238636; -fx-text-fill: white; -fx-cursor: hand; -fx-border-radius: 6; -fx-background-radius: 6; -fx-pref-width: 310;"/>
+                </VBox>
+
+                <!-- Pending Orders -->
+                <VBox spacing="10" style="-fx-padding: 20; -fx-background-color: #0d1117; -fx-border-color: #30363d; -fx-border-width: 1 0 0 0;">
+                    <Label text="Open Positions" style="-fx-text-fill: #58a6ff; -fx-font-size: 14; -fx-font-weight: bold;"/>
+                    <ListView fx:id="orderListView" prefHeight="200" style="-fx-background-color: #161b22; -fx-control-inner-background: #161b22; -fx-text-fill: #c9d1d9; -fx-border-color: #30363d; -fx-border-radius: 6; -fx-background-radius: 6;"/>
+                    <HBox spacing="10">
+                        <Button fx:id="closePositionButton" text="Close Position" style="-fx-padding: 10 20; -fx-background-color: #f85149; -fx-text-fill: white; -fx-cursor: hand; -fx-border-radius: 4; -fx-background-radius: 4;"/>
+                        <Button fx:id="cancelOrderButton" text="Cancel Order" style="-fx-padding: 10 20; -fx-background-color: #6e7681; -fx-text-fill: white; -fx-cursor: hand; -fx-border-radius: 4; -fx-background-radius: 4;"/>
+                        <Button fx:id="refreshOrdersButton" text="Refresh" style="-fx-padding: 10 20; -fx-background-color: #21262d; -fx-text-fill: #c9d1d9; -fx-cursor: hand; -fx-border-radius: 4; -fx-background-radius: 4;"/>
+                    </HBox>
+                </VBox>
+            </VBox>
+        </SplitPane>
+    </center>
+</BorderPane>

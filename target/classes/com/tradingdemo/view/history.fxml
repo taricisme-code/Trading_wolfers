@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane style="-fx-background-color: #1e1e2e;" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.tradingdemo.controller.HistoryController">
+    
+    <!-- Top Navigation -->
+    <top>
+        <HBox spacing="10" style="-fx-background-color: #252535; -fx-padding: 15;">
+            <Button fx:id="backButton" text="← Back" style="-fx-padding: 8 15; -fx-background-color: #555555; -fx-text-fill: white; -fx-cursor: hand;"/>
+            <Label text="Trade History" style="-fx-text-fill: #00d4ff; -fx-font-size: 18; -fx-font-weight: bold; -fx-pref-width: 300;"/>
+            <Button fx:id="refreshButton" text="🔄 Refresh" style="-fx-padding: 8 15; -fx-background-color: #00d4ff; -fx-text-fill: #1e1e2e; -fx-font-weight: bold; -fx-cursor: hand;"/>
+        </HBox>
+    </top>
+
+    <!-- Main Content -->
+    <center>
+        <VBox spacing="20" style="-fx-padding: 30;">
+            
+            <!-- Title -->
+            <Label text="Your Trade History" style="-fx-text-fill: #00d4ff; -fx-font-size: 16; -fx-font-weight: bold;"/>
+            
+            <!-- History List -->
+            <ListView fx:id="historyListView" 
+                     style="-fx-padding: 10; -fx-background-color: #1e1e2e; -fx-control-inner-background: #252535; -fx-text-fill: #cccccc; -fx-font-size: 11;"/>
+        </VBox>
+    </center>
+</BorderPane>
