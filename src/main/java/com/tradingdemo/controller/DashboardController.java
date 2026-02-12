@@ -36,6 +36,10 @@ public class DashboardController {
     @FXML private VBox walletBox;
     @FXML private VBox historyBox;
     @FXML private VBox newsBox;
+    @FXML
+    private VBox profilBox;
+    @FXML
+    private Button profilebutton;
 
     private final WalletService walletService = new WalletService();
 
@@ -85,6 +89,7 @@ public class DashboardController {
                     walletButton.setOnAction(e -> navigateToWallet());
                     historyButton.setOnAction(e -> navigateToHistory());
                     newsButton.setOnAction(e -> navigateToNews());
+                    profilebutton.setOnAction(e -> navigateToProfile());
                     logoutButton.setOnAction(e -> handleLogout());
                     
                     // Show user navigation boxes
@@ -152,6 +157,10 @@ public class DashboardController {
     @FXML
     private void navigateToAdmin() {
         loadView("/com/tradingdemo/view/admin.fxml", "Admin Panel");
+    }
+    @FXML
+    private void navigateToProfile() {
+        loadView("/com/tradingdemo/view/profil.fxml", "Profile");
     }
 
     @FXML

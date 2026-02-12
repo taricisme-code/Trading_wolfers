@@ -14,7 +14,7 @@ public class DatabaseConnection {
     // Database configuration
     // For XAMPP (phpMyAdmin) local MySQL
     // Default root has empty password. Update if you've set a password.
-    private static final String DB_URL = "jdbc:mysql://172.20.10.5/crypto_trading_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/crypto_trading_db";
     private static final String DB_USER = "root";
     private static final String DB_PASSWORD = ""; // XAMPP default: empty password
     private static final String DB_DRIVER = "com.mysql.cj.jdbc.Driver";

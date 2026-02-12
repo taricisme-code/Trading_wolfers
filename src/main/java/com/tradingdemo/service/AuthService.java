@@ -143,4 +143,26 @@ public class AuthService {
         }
         return success;
     }
+    public User updateProfile(String firstName, String lastName, String email, String phone) {
+
+        if (currentUser == null) {
+            return null;
+        }
+
+        // Vérifier si l'email existe déjà pour un autre utilisateur
+        User existingUser = userDAO.getUserByEmail(email);
+        if (existingUser != null && existingUser.getId() != currentUser.getId()) {
+            return null; // email déjà utilisé
+        }
+
+        // Mettre à jour les données
+        currentUser.setFirstName(firstName);
+        currentUser.setLastName(lastName);
+        currentUser.setEmail(email);
+        currentUser.setPhone(phone);
+
+        boolean updated = userDAO.updateUser(currentUser);
+
+        return updated ? currentUser : null;
+    }
 }
