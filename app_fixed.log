@@ -1,0 +1,59 @@
+nohup: ignoring input
+=========================================
+  CRYPTOCURRENCY TRADING APP
+  Local Run (XAMPP / phpMyAdmin)
+=========================================
+
+Prereqs:
+  1) Start XAMPP and ensure MySQL is running
+  2) Open phpMyAdmin -> Import -> choose database.sql -> Go
+  3) DB user=root, password is empty (default)
+
+Building...
+Launching...
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ----------------< com.tradingdemo:crypto-trading-demo >-----------------
+[INFO] Building Crypto Trading Demo 1.0.0
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] >>> javafx:0.0.8:run (default-cli) > process-classes @ crypto-trading-demo >>>
+[WARNING] 6 problems were encountered while building the effective model for org.openjfx:javafx-controls:jar:21.0.2
+[WARNING] The artifact mysql:mysql-connector-java:jar:8.0.33 has been relocated to com.mysql:mysql-connector-j:jar:8.0.33: MySQL Connector/J artifacts moved to reverse-DNS compliant Maven 2+ coordinates.
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ crypto-trading-demo ---
+[INFO] Copying 10 resources from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ crypto-trading-demo ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] <<< javafx:0.0.8:run (default-cli) < process-classes @ crypto-trading-demo <<<
+[INFO] 
+[WARNING] The artifact mysql:mysql-connector-java:jar:8.0.33 has been relocated to com.mysql:mysql-connector-j:jar:8.0.33: MySQL Connector/J artifacts moved to reverse-DNS compliant Maven 2+ coordinates.
+[INFO] 
+[INFO] --- javafx:0.0.8:run (default-cli) @ crypto-trading-demo ---
+Database connection established successfully!
+Error loading FXML: Error resolving onMouseEntered='#loginButton.setStyle('-fx-padding: 14; -fx-pref-width: 100%; -fx-font-size: 15; -fx-font-weight: bold; -fx-background-color: #2850eb; -fx-text-fill: white; -fx-cursor: hand; -fx-border-radius: 10; -fx-background-radius: 10;')', either the event handler is not in the Namespace or there is an error in the script.
+/home/g701943/Trading_wolfers/target/classes/com/tradingdemo/view/login.fxml:38
+
+javafx.fxml.LoadException: Error resolving onMouseEntered='#loginButton.setStyle('-fx-padding: 14; -fx-pref-width: 100%; -fx-font-size: 15; -fx-font-weight: bold; -fx-background-color: #2850eb; -fx-text-fill: white; -fx-cursor: hand; -fx-border-radius: 10; -fx-background-radius: 10;')', either the event handler is not in the Namespace or there is an error in the script.
+/home/g701943/Trading_wolfers/target/classes/com/tradingdemo/view/login.fxml:38
+
+	at javafx.fxml@21.0.2/javafx.fxml.FXMLLoader.constructLoadException(FXMLLoader.java:2718)
+	at javafx.fxml@21.0.2/javafx.fxml.FXMLLoader$Element.processEventHandlerAttributes(FXMLLoader.java:623)
+	at javafx.fxml@21.0.2/javafx.fxml.FXMLLoader$ValueElement.processEndElement(FXMLLoader.java:783)
+	at javafx.fxml@21.0.2/javafx.fxml.FXMLLoader.processEndElement(FXMLLoader.java:2969)
+	at javafx.fxml@21.0.2/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2654)
+	at javafx.fxml@21.0.2/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2563)
+	at javafx.fxml@21.0.2/javafx.fxml.FXMLLoader.load(FXMLLoader.java:2531)
+	at com.tradingdemo.MainApp.start(MainApp.java:32)
+	at javafx.graphics@21.0.2/com.sun.javafx.application.LauncherImpl.lambda$launchApplication1$9(LauncherImpl.java:839)
+	at javafx.graphics@21.0.2/com.sun.javafx.application.PlatformImpl.lambda$runAndWait$12(PlatformImpl.java:483)
+	at javafx.graphics@21.0.2/com.sun.javafx.application.PlatformImpl.lambda$runLater$10(PlatformImpl.java:456)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:399)
+	at javafx.graphics@21.0.2/com.sun.javafx.application.PlatformImpl.lambda$runLater$11(PlatformImpl.java:455)
+	at javafx.graphics@21.0.2/com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	at javafx.graphics@21.0.2/com.sun.glass.ui.gtk.GtkApplication._runLoop(Native Method)
+	at javafx.graphics@21.0.2/com.sun.glass.ui.gtk.GtkApplication.lambda$runLoop$10(GtkApplication.java:263)
+	at java.base/java.lang.Thread.run(Thread.java:840)

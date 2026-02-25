@@ -2,7 +2,7 @@
 
 # Script to create a test user and then convert them to admin
 
-cd /home/g701943/project_java_fx
+cd /home/g701943/Trading_wolfers
 
 echo "========================================="
 echo "  Creating Test Admin User"

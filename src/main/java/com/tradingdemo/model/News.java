@@ -11,6 +11,10 @@ public class News {
     private String content;
     private String source;
     private LocalDateTime publishedAt;
+    private String imageUrl;
+    private String url;
+    private String tags;
+    private String categories;
 
     // Constructors
     public News() {
@@ -64,6 +68,38 @@ public class News {
         this.publishedAt = publishedAt;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getTags() {
+        return tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
+    }
+
+    public String getCategories() {
+        return categories;
+    }
+
+    public void setCategories(String categories) {
+        this.categories = categories;
+    }
+
     @Override
     public String toString() {
         return "News{" +
@@ -73,3 +109,4 @@ public class News {
                 '}';
     }
 }
+
