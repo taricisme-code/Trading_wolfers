@@ -1,0 +1,227 @@
+=========================================
+  CRYPTOCURRENCY TRADING APP
+  Local Run (XAMPP / phpMyAdmin)
+=========================================
+
+Prereqs:
+  1) Start XAMPP and ensure MySQL is running
+  2) Open phpMyAdmin -> Import -> choose database.sql -> Go
+  3) DB user=root, password is empty (default)
+
+Building...
+Launching...
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ----------------< com.tradingdemo:crypto-trading-demo >-----------------
+[INFO] Building Crypto Trading Demo 1.0.0
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] >>> javafx:0.0.8:run (default-cli) > process-classes @ crypto-trading-demo >>>
+[WARNING] 6 problems were encountered while building the effective model for org.openjfx:javafx-controls:jar:21.0.2
+[WARNING] The artifact mysql:mysql-connector-java:jar:8.0.33 has been relocated to com.mysql:mysql-connector-j:jar:8.0.33: MySQL Connector/J artifacts moved to reverse-DNS compliant Maven 2+ coordinates.
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ crypto-trading-demo ---
+[INFO] Copying 10 resources from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ crypto-trading-demo ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] <<< javafx:0.0.8:run (default-cli) < process-classes @ crypto-trading-demo <<<
+[INFO] 
+[WARNING] The artifact mysql:mysql-connector-java:jar:8.0.33 has been relocated to com.mysql:mysql-connector-j:jar:8.0.33: MySQL Connector/J artifacts moved to reverse-DNS compliant Maven 2+ coordinates.
+[INFO] 
+[INFO] --- javafx:0.0.8:run (default-cli) @ crypto-trading-demo ---
+Database connection established successfully!
+DEBUG: Attempting login with email: omar@gmail.com
+DEBUG: User found: omar@gmail.com (ID: 9)
+DEBUG: Verifying password...
+DEBUG: Login successful for: omar@gmail.com
+DEBUG: Login successful, loading dashboard...
+DEBUG: Loading dashboard FXML...
+DEBUG: Dashboard FXML resource: file:/home/g701943/Trading_wolfers/target/classes/com/tradingdemo/view/dashboard.fxml
+Feb 13, 2026 9:54:41 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNING: Loading FXML document with JavaFX API of version 25 by JavaFX runtime of version 21.0.2
+DEBUG: Initializing DashboardController...
+DEBUG: Current user: omar@gmail.com
+DEBUG: Setting welcome label...
+DEBUG: User is regular user - showing user pages
+DEBUG: Updating balance for user ID: 9
+DEBUG: Getting balance for user ID: 9
+DEBUG: User balance: 959.26341
+DEBUG: Setting up button handlers...
+DEBUG: User dashboard initialized successfully
+DEBUG: Dashboard FXML loaded successfully
+DEBUG: Stylesheet applied: file:/home/g701943/Trading_wolfers/target/classes/com/tradingdemo/view/styles.css
+DEBUG: Dashboard scene displayed
+DEBUG: Loading view: Trading from /com/tradingdemo/view/trading.fxml
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++4.26
+DEBUG: Successfully loaded Trading
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++4.26
+Error making sentiment API request: Connect timed out
+Error making API request: Connect timed out
+Error making API request: Connect timed out
+⚠ Binance API unavailable - using simulated data
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++3.74
+Error making API request: Connect timed out
+Error making sentiment API request: Connect timed out
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++3.50
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++3.18
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++2.85
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++2.57
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++2.56
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++2.15
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++1.99
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++1.84
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++1.63
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++1.21
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++1.09
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++1.34
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++1.40
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++1.39
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++1.68
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++1.89
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++2.02
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++2.22
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++1.96
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++1.73
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++1.37
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++1.14
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++1.39
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++1.35
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++1.09
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++1.09
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++1.09
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++1.13
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++1.13
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++1.13
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++1.13
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++1.13
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++1.13
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++1.13
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++1.13
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++0.84
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++0.89
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++0.93
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++0.69
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++0.56
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++0.50
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++0.32
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++0.39
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++0.31
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++0.46
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++0.70
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++0.99
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++1.17
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++1.50
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++1.32
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++1.28
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++1.19
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++1.51
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++1.11
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++1.03
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++0.90
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++0.66
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▼ --38.22
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++6.13
+Error making sentiment API request: Connect timed out
+Error making sentiment API request: Connect timed out
+Error making sentiment API request: Connect timed out
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++6.15
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++6.43
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++6.43
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++6.19
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++6.10
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++5.83
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++6.09
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++5.85
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++5.68
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++5.91
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++5.83
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++5.46
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++5.73
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++5.45
+DEBUG: Refreshing order list - found 1 total orders
+DEBUG: Adding order to list: BTC | LONG | 0.0010 | $40,736.59 | ▲ ++5.12
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  05:48 min
+[INFO] Finished at: 2026-02-13T22:00:20+01:00
+[INFO] ------------------------------------------------------------------------

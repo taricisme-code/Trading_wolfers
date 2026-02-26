@@ -30,7 +30,7 @@ CREATE DATABASE crypto_trading_db;
 USE crypto_trading_db;
 EOF
 
-docker exec -i trading_db mariadb -u root -proot123 crypto_trading_db < /home/g701943/project_java_fx/database_setup.sql
+docker exec -i trading_db mariadb -u root -proot123 crypto_trading_db < /home/g701943/Trading_wolfers/database_setup.sql
 echo "✓ Fresh schema imported"
 echo ""
 
@@ -51,7 +51,7 @@ echo "  Email: admin@test.com"
 echo "  Password: password123"
 echo ""
 echo "NEXT: Build and run the app"
-echo "  $ cd /home/g701943/project_java_fx"
+echo "  $ cd /home/g701943/Trading_wolfers"
 echo "  $ mvn clean package"
 echo "  $ mvn javafx:run"
 echo ""

@@ -2,7 +2,7 @@
 
 # Quick launcher for Scene Builder with project FXML files
 
-FXML_DIR="/home/g701943/project_java_fx/src/main/resources/com/tradingdemo/view"
+FXML_DIR="/home/g701943/Trading_wolfers/src/main/resources/com/tradingdemo/view"
 
 echo "========================================="
 echo "  Scene Builder Quick Launch"

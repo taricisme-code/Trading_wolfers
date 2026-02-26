@@ -15,6 +15,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ListCell;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 /**
@@ -32,6 +34,24 @@ public class WalletController {
 
     @FXML
     public void initialize() {
+        // Set custom cell factory for black text
+        walletListView.setCellFactory(lv -> {
+            ListCell<String> cell = new ListCell<String>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                        setStyle(null);
+                    } else {
+                        setText(item);
+                        setStyle("-fx-text-fill: #111827; -fx-font-size: 13px;");
+                    }
+                }
+            };
+            return cell;
+        });
+        
         refreshButton.setOnAction(e -> refreshWallet());
         backButton.setOnAction(e -> goBack());
         refreshWallet();

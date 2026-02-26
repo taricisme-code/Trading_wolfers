@@ -1,6 +1,7 @@
 package com.tradingdemo.controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import com.tradingdemo.model.User;
 import com.tradingdemo.service.AuthService;
@@ -125,12 +126,39 @@ public class DashboardController {
             System.out.println("DEBUG: Getting balance for user ID: " + userId);
             double balance = walletService.getUserBalance(userId);
             System.out.println("DEBUG: User balance: " + balance);
+            
+            // Calculate portfolio value (holdings + cash balance)
+            List<com.tradingdemo.model.WalletItem> holdings = walletService.getUserWallet(userId);
+            double portfolioValue = balance; // Start with cash balance
+            
+            for (com.tradingdemo.model.WalletItem item : holdings) {
+                // Simulate current price for portfolio calculation
+                double currentPrice = simulatePrice(item.getSymbol());
+                portfolioValue += item.getQuantity() * currentPrice;
+            }
+            
+            System.out.println("DEBUG: Portfolio value: " + portfolioValue);
             balanceLabel.setText(String.format("Balance: $%.2f", balance));
-            portfolioLabel.setText("Portfolio: $0.00");
+            portfolioLabel.setText(String.format("Portfolio: $%.2f", portfolioValue));
         } catch (Exception e) {
             System.err.println("ERROR updating balance: " + e.getMessage());
             e.printStackTrace();
             balanceLabel.setText("Balance: Error");
+            portfolioLabel.setText("Portfolio: Error");
+        }
+    }
+    
+    // Simulate cryptocurrency prices for portfolio calculation
+    private double simulatePrice(String symbol) {
+        switch (symbol.toUpperCase()) {
+            case "BTC": return 69034.61;
+            case "ETH": return 3542.88;
+            case "BNB": return 421.35;
+            case "ADA": return 0.58;
+            case "SOL": return 125.43;
+            case "XRP": return 0.62;
+            case "DOGE": return 0.087;
+            default: return 1.0;
         }
     }
 

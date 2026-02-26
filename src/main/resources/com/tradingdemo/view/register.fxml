@@ -9,46 +9,54 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.GridPane?>
 
-<VBox spacing="15" alignment="TOP_CENTER" style="-fx-background-color: #1e1e2e;" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.tradingdemo.controller.RegisterController">
+<VBox spacing="15" alignment="TOP_CENTER" style="-fx-background-color: #f8fafc;" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.tradingdemo.controller.RegisterController">
     <padding>
         <Insets top="30" right="50" bottom="30" left="50"/>
     </padding>
 
-    <!-- Title -->
-    <Label text="Create Account" style="-fx-text-fill: #00d4ff; -fx-font-size: 32; -fx-font-weight: bold;"/>
-    <Label text="Join our trading platform" style="-fx-text-fill: #888888; -fx-font-size: 12;"/>
-
-    <!-- Registration Form Grid -->
-    <GridPane hgap="15" vgap="12" style="-fx-padding: 20;">
+    <!-- Registration Card -->
+    <VBox spacing="20" alignment="CENTER" style="-fx-background-color: white; -fx-border-color: #e5e7eb; -fx-border-radius: 16; -fx-background-radius: 16; -fx-padding: 40; -fx-border-width: 1; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 20, 0, 0, 4); -fx-min-width: 600;">
         
-        <!-- First Name -->
-        <Label text="First Name" style="-fx-text-fill: #cccccc;" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-        <TextField fx:id="firstNameField" promptText="First name" GridPane.columnIndex="1" GridPane.rowIndex="0" style="-fx-padding: 8;"/>
+        <!-- Title -->
+        <Label text="🪙" style="-fx-font-size: 42;"/>
+        <Label text="Create Account" style="-fx-text-fill: #111827; -fx-font-size: 28; -fx-font-weight: bold;"/>
+        <Label text="Join our trading platform" style="-fx-text-fill: #111827; -fx-font-size: 13;"/>
 
-        <!-- Last Name -->
-        <Label text="Last Name" style="-fx-text-fill: #cccccc;" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-        <TextField fx:id="lastNameField" promptText="Last name" GridPane.columnIndex="1" GridPane.rowIndex="1" style="-fx-padding: 8;"/>
+        <!-- Registration Form Grid -->
+        <GridPane hgap="20" vgap="15" style="-fx-padding: 10 0;">
+            
+            <!-- First Name -->
+            <Label text="First Name" style="-fx-text-fill: #374151; -fx-font-weight: bold; -fx-font-size: 13;" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+            <TextField fx:id="firstNameField" promptText="First name" style="-fx-padding: 12; -fx-font-size: 14; -fx-text-fill: #111827; -fx-background-color: #f9fafb; -fx-border-color: #e5e7eb; -fx-border-radius: 8; -fx-background-radius: 8; -fx-border-width: 1; -fx-pref-width: 250;" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
 
-        <!-- Email -->
-        <Label text="Email" style="-fx-text-fill: #cccccc;" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-        <TextField fx:id="emailField" promptText="Email address" GridPane.columnIndex="1" GridPane.rowIndex="2" style="-fx-padding: 8;"/>
+            <!-- Last Name -->
+            <Label text="Last Name" style="-fx-text-fill: #374151; -fx-font-weight: bold; -fx-font-size: 13;" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+            <TextField fx:id="lastNameField" promptText="Last name" style="-fx-padding: 12; -fx-font-size: 14; -fx-text-fill: #111827; -fx-background-color: #f9fafb; -fx-border-color: #e5e7eb; -fx-border-radius: 8; -fx-background-radius: 8; -fx-border-width: 1; -fx-pref-width: 250;" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
-        <!-- Phone -->
-        <Label text="Phone" style="-fx-text-fill: #cccccc;" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-        <TextField fx:id="phoneField" promptText="Phone number" GridPane.columnIndex="1" GridPane.rowIndex="3" style="-fx-padding: 8;"/>
+            <!-- Email -->
+            <Label text="Email" style="-fx-text-fill: #374151; -fx-font-weight: bold; -fx-font-size: 13;" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+            <TextField fx:id="emailField" promptText="Email address" style="-fx-padding: 12; -fx-font-size: 14; -fx-text-fill: #111827; -fx-background-color: #f9fafb; -fx-border-color: #e5e7eb; -fx-border-radius: 8; -fx-background-radius: 8; -fx-border-width: 1; -fx-pref-width: 250;" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
 
-        <!-- Password -->
-        <Label text="Password" style="-fx-text-fill: #cccccc;" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
-        <PasswordField fx:id="passwordField" promptText="At least 6 characters" GridPane.columnIndex="1" GridPane.rowIndex="4" style="-fx-padding: 8;"/>
+            <!-- Phone -->
+            <Label text="Phone" style="-fx-text-fill: #374151; -fx-font-weight: bold; -fx-font-size: 13;" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+            <TextField fx:id="phoneField" promptText="Phone number" style="-fx-padding: 12; -fx-font-size: 14; -fx-text-fill: #111827; -fx-background-color: #f9fafb; -fx-border-color: #e5e7eb; -fx-border-radius: 8; -fx-background-radius: 8; -fx-border-width: 1; -fx-pref-width: 250;" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
 
-        <!-- Confirm Password -->
-        <Label text="Confirm Password" style="-fx-text-fill: #cccccc;" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
-        <PasswordField fx:id="confirmPasswordField" promptText="Confirm password" GridPane.columnIndex="1" GridPane.rowIndex="5" style="-fx-padding: 8;"/>
-    </GridPane>
+            <!-- Password -->
+            <Label text="Password" style="-fx-text-fill: #374151; -fx-font-weight: bold; -fx-font-size: 13;" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+            <PasswordField fx:id="passwordField" promptText="Create password" style="-fx-padding: 12; -fx-font-size: 14; -fx-text-fill: #111827; -fx-background-color: #f9fafb; -fx-border-color: #e5e7eb; -fx-border-radius: 8; -fx-background-radius: 8; -fx-border-width: 1; -fx-pref-width: 250;" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
 
-    <!-- Buttons -->
-    <HBox spacing="10" alignment="CENTER" style="-fx-padding: 20;">
-        <Button fx:id="registerButton" text="CREATE ACCOUNT" style="-fx-padding: 12 40; -fx-font-size: 14; -fx-font-weight: bold; -fx-background-color: #00d4ff; -fx-text-fill: #1e1e2e; -fx-cursor: hand;"/>
-        <Button fx:id="loginButton" text="Already have an account?" style="-fx-padding: 12 30; -fx-font-size: 12; -fx-background-color: transparent; -fx-text-fill: #00d4ff; -fx-border-color: #00d4ff; -fx-cursor: hand;"/>
-    </HBox>
+            <!-- Confirm Password -->
+            <Label text="Confirm Password" style="-fx-text-fill: #374151; -fx-font-weight: bold; -fx-font-size: 13;" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+            <PasswordField fx:id="confirmPasswordField" promptText="Confirm password" style="-fx-padding: 12; -fx-font-size: 14; -fx-text-fill: #111827; -fx-background-color: #f9fafb; -fx-border-color: #e5e7eb; -fx-border-radius: 8; -fx-background-radius: 8; -fx-border-width: 1; -fx-pref-width: 250;" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+        </GridPane>
+
+        <!-- Buttons -->
+        <VBox spacing="12" alignment="CENTER" style="-fx-padding: 10 0;">
+            <Button fx:id="registerButton" text="Create Account" style="-fx-padding: 14 0; -fx-pref-width: 300; -fx-font-size: 15; -fx-font-weight: bold; -fx-background-color: #3861fb; -fx-text-fill: white; -fx-cursor: hand; -fx-border-radius: 10; -fx-background-radius: 10;"/>
+            <HBox spacing="8" alignment="CENTER">
+                <Label text="Already have an account?" style="-fx-text-fill: #111827; -fx-font-size: 13;"/>
+                <Button fx:id="loginButton" text="Login here" style="-fx-padding: 0; -fx-font-size: 13; -fx-background-color: transparent; -fx-text-fill: #3861fb; -fx-cursor: hand; -fx-font-weight: bold; -fx-underline: true;"/>
+            </HBox>
+        </VBox>
+    </VBox>
 </VBox>

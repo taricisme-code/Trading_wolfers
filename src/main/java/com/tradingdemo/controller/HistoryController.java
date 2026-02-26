@@ -14,6 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ListCell;
 import javafx.stage.Stage;
 
 /**
@@ -30,6 +31,24 @@ public class HistoryController {
 
     @FXML
     public void initialize() {
+        // Set custom cell factory for black text
+        historyListView.setCellFactory(lv -> {
+            ListCell<String> cell = new ListCell<String>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                        setStyle(null);
+                    } else {
+                        setText(item);
+                        setStyle("-fx-text-fill: #111827; -fx-font-size: 13px;");
+                    }
+                }
+            };
+            return cell;
+        });
+        
         refreshButton.setOnAction(e -> refreshHistory());
         backButton.setOnAction(e -> goBack());
         refreshHistory();

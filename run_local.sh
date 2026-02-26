@@ -6,7 +6,7 @@
 
 set -e
 
-PROJECT_DIR="/home/g701943/project_java_fx"
+PROJECT_DIR="/home/g701943/Trading_wolfers"
 cd "$PROJECT_DIR"
 
 echo "========================================="

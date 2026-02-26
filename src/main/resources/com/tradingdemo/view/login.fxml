@@ -9,36 +9,41 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox spacing="20" alignment="CENTER" style="-fx-background-color: #1e1e2e;" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.tradingdemo.controller.LoginController">
+<VBox spacing="20" alignment="CENTER" style="-fx-background-color: #f8fafc;" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.tradingdemo.controller.LoginController">
     <padding>
         <Insets top="50" right="50" bottom="50" left="50"/>
     </padding>
 
-    <!-- Logo/Title -->
-    <Label text="Crypto Trading Demo" style="-fx-text-fill: #00d4ff; -fx-font-size: 36; -fx-font-weight: bold;"/>
-    <Label text="Login to Your Account" style="-fx-text-fill: #888888; -fx-font-size: 14;"/>
+    <!-- Login Card -->
+    <VBox spacing="25" alignment="CENTER" style="-fx-background-color: white; -fx-border-color: #e5e7eb; -fx-border-radius: 16; -fx-background-radius: 16; -fx-padding: 50; -fx-border-width: 1; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 20, 0, 0, 4); -fx-min-width: 450; -fx-max-width: 450;">
+        
+        <!-- Logo/Title -->
+        <Label text="🪙" style="-fx-font-size: 48;"/>
+        <Label text="Crypto Trading Platform" style="-fx-text-fill: #111827; -fx-font-size: 28; -fx-font-weight: bold;"/>
+        <Label text="Login to Your Account" style="-fx-text-fill: #6b7280; -fx-font-size: 14;"/>
 
-    <!-- Email Field -->
-    <VBox spacing="5">
-        <Label text="Email Address" style="-fx-text-fill: #cccccc;"/>
-        <TextField fx:id="emailField" promptText="Enter your email" style="-fx-padding: 10; -fx-font-size: 14;"/>
+        <!-- Email Field -->
+        <VBox spacing="8" style="-fx-pref-width: 100%;">
+            <Label text="Email Address" style="-fx-text-fill: #374151; -fx-font-size: 13; -fx-font-weight: bold;"/>
+            <TextField fx:id="emailField" promptText="Enter your email" style="-fx-padding: 12; -fx-font-size: 14; -fx-text-fill: #111827; -fx-background-color: #f9fafb; -fx-border-color: #e5e7eb; -fx-border-radius: 8; -fx-background-radius: 8; -fx-border-width: 1;"/>
+        </VBox>
+
+        <!-- Password Field -->
+        <VBox spacing="8" style="-fx-pref-width: 100%;">
+            <Label text="Password" style="-fx-text-fill: #374151; -fx-font-size: 13; -fx-font-weight: bold;"/>
+            <PasswordField fx:id="passwordField" promptText="Enter your password" style="-fx-padding: 12; -fx-font-size: 14; -fx-text-fill: #111827; -fx-background-color: #f9fafb; -fx-border-color: #e5e7eb; -fx-border-radius: 8; -fx-background-radius: 8; -fx-border-width: 1;"/>
+        </VBox>
+
+        <!-- Login Button -->
+        <Button fx:id="loginButton" text="Login" maxWidth="Infinity" style="-fx-padding: 14 40; -fx-font-size: 15; -fx-font-weight: bold; -fx-background-color: #3861fb; -fx-text-fill: white; -fx-cursor: hand; -fx-border-radius: 10; -fx-background-radius: 10;"/>
+
+        <!-- Divider -->
+        <Label text="──────────────────────" style="-fx-text-fill: #e5e7eb;"/>
+
+        <!-- Register Link -->
+        <HBox spacing="8" alignment="CENTER">
+            <Label text="Don't have an account?" style="-fx-text-fill: #111827; -fx-font-size: 13;"/>
+            <Button fx:id="registerButton" text="Register Now" style="-fx-padding: 0; -fx-font-size: 13; -fx-background-color: transparent; -fx-text-fill: #3861fb; -fx-cursor: hand; -fx-font-weight: bold; -fx-underline: true;"/>
+        </HBox>
     </VBox>
-
-    <!-- Password Field -->
-    <VBox spacing="5">
-        <Label text="Password" style="-fx-text-fill: #cccccc;"/>
-        <PasswordField fx:id="passwordField" promptText="Enter your password" style="-fx-padding: 10; -fx-font-size: 14;"/>
-    </VBox>
-
-    <!-- Login Button -->
-    <Button fx:id="loginButton" text="LOGIN" style="-fx-padding: 12 40; -fx-font-size: 14; -fx-font-weight: bold; -fx-background-color: #00d4ff; -fx-text-fill: #1e1e2e; -fx-cursor: hand;"/>
-
-    <!-- Separator -->
-    <Label text="─────────────────────────────" style="-fx-text-fill: #444444;"/>
-
-    <!-- Register Link -->
-    <HBox spacing="10" alignment="CENTER">
-        <Label text="Don't have an account?" style="-fx-text-fill: #888888;"/>
-        <Button fx:id="registerButton" text="Register Now" style="-fx-padding: 8 16; -fx-font-size: 12; -fx-background-color: transparent; -fx-text-fill: #00d4ff; -fx-cursor: hand;"/>
-    </HBox>
 </VBox>

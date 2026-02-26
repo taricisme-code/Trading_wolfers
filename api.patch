@@ -1,0 +1,1183 @@
+diff --git a/create_test_admin.sh b/create_test_admin.sh
+index 8c3955a..e12e400 100644
+--- a/create_test_admin.sh
++++ b/create_test_admin.sh
+@@ -2,7 +2,7 @@
+ 
+ # Script to create a test user and then convert them to admin
+ 
+-cd /home/g701943/project_java_fx
++cd /home/g701943/Trading_wolfers
+ 
+ echo "========================================="
+ echo "  Creating Test Admin User"
+diff --git a/diagnose.sh b/diagnose.sh
+index d818c9f..20e0423 100755
+--- a/diagnose.sh
++++ b/diagnose.sh
+@@ -11,7 +11,7 @@ echo "  Diagnostics & Troubleshooting"
+ echo "========================================="
+ echo ""
+ 
+-PROJECT_DIR="/home/g701943/project_java_fx"
++PROJECT_DIR="/home/g701943/Trading_wolfers"
+ cd "$PROJECT_DIR"
+ 
+ # Check if Docker container is running
+diff --git a/open_scene_builder.sh b/open_scene_builder.sh
+index d6d9d1d..4d14420 100755
+--- a/open_scene_builder.sh
++++ b/open_scene_builder.sh
+@@ -2,7 +2,7 @@
+ 
+ # Quick launcher for Scene Builder with project FXML files
+ 
+-FXML_DIR="/home/g701943/project_java_fx/src/main/resources/com/tradingdemo/view"
++FXML_DIR="/home/g701943/Trading_wolfers/src/main/resources/com/tradingdemo/view"
+ 
+ echo "========================================="
+ echo "  Scene Builder Quick Launch"
+diff --git a/pom.xml b/pom.xml
+index d22c2bd..b12a868 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -53,6 +53,13 @@
+             <version>0.4</version>
+         </dependency>
+ 
++        <!-- Gson for JSON parsing -->
++        <dependency>
++            <groupId>com.google.code.gson</groupId>
++            <artifactId>gson</artifactId>
++            <version>2.10.1</version>
++        </dependency>
++
+         <!-- Testing -->
+         <dependency>
+             <groupId>junit</groupId>
+diff --git a/quick_setup.sh b/quick_setup.sh
+index 89ea7b6..6ea9788 100755
+--- a/quick_setup.sh
++++ b/quick_setup.sh
+@@ -12,7 +12,7 @@ echo "  Quick Setup & Run"
+ echo "========================================="
+ echo ""
+ 
+-PROJECT_DIR="/home/g701943/project_java_fx"
++PROJECT_DIR="/home/g701943/Trading_wolfers"
+ cd "$PROJECT_DIR"
+ 
+ # ============================================
+diff --git a/reset_db.sh b/reset_db.sh
+index 9752ee1..b437c60 100755
+--- a/reset_db.sh
++++ b/reset_db.sh
+@@ -30,7 +30,7 @@ CREATE DATABASE crypto_trading_db;
+ USE crypto_trading_db;
+ EOF
+ 
+-docker exec -i trading_db mariadb -u root -proot123 crypto_trading_db < /home/g701943/project_java_fx/database_setup.sql
++docker exec -i trading_db mariadb -u root -proot123 crypto_trading_db < /home/g701943/Trading_wolfers/database_setup.sql
+ echo "✓ Fresh schema imported"
+ echo ""
+ 
+@@ -51,7 +51,7 @@ echo "  Email: admin@test.com"
+ echo "  Password: password123"
+ echo ""
+ echo "NEXT: Build and run the app"
+-echo "  $ cd /home/g701943/project_java_fx"
++echo "  $ cd /home/g701943/Trading_wolfers"
+ echo "  $ mvn clean package"
+ echo "  $ mvn javafx:run"
+ echo ""
+diff --git a/run.sh b/run.sh
+index 26786bc..d51b65c 100755
+--- a/run.sh
++++ b/run.sh
+@@ -11,7 +11,7 @@ echo "  Build & Run"
+ echo "========================================="
+ echo ""
+ 
+-PROJECT_DIR="/home/g701943/project_java_fx"
++PROJECT_DIR="/home/g701943/Trading_wolfers"
+ cd "$PROJECT_DIR"
+ 
+ # Setup Maven in PATH
+diff --git a/run_local.sh b/run_local.sh
+index 2adb9e1..7389150 100755
+--- a/run_local.sh
++++ b/run_local.sh
+@@ -6,7 +6,7 @@
+ 
+ set -e
+ 
+-PROJECT_DIR="/home/g701943/project_java_fx"
++PROJECT_DIR="/home/g701943/Trading_wolfers"
+ cd "$PROJECT_DIR"
+ 
+ echo "========================================="
+diff --git a/src/main/java/com/tradingdemo/config/DatabaseConnection.java b/src/main/java/com/tradingdemo/config/DatabaseConnection.java
+index 080983c..0a43a94 100644
+--- a/src/main/java/com/tradingdemo/config/DatabaseConnection.java
++++ b/src/main/java/com/tradingdemo/config/DatabaseConnection.java
+@@ -14,7 +14,7 @@ public class DatabaseConnection {
+     // Database configuration
+     // For XAMPP (phpMyAdmin) local MySQL
+     // Default root has empty password. Update if you've set a password.
+-    private static final String DB_URL = "jdbc:mysql://localhost:3306/crypto_trading_db";
++    private static final String DB_URL = "jdbc:mysql://192.168.1.119/crypto_trading_db";
+     private static final String DB_USER = "root";
+     private static final String DB_PASSWORD = ""; // XAMPP default: empty password
+     private static final String DB_DRIVER = "com.mysql.cj.jdbc.Driver";
+diff --git a/src/main/java/com/tradingdemo/controller/NewsController.java b/src/main/java/com/tradingdemo/controller/NewsController.java
+index fbd65fb..a133886 100644
+--- a/src/main/java/com/tradingdemo/controller/NewsController.java
++++ b/src/main/java/com/tradingdemo/controller/NewsController.java
+@@ -1,23 +1,31 @@
+ package com.tradingdemo.controller;
+ 
+ import java.io.IOException;
++import java.time.format.DateTimeFormatter;
+ import java.util.List;
+ 
+ import com.tradingdemo.model.News;
++import com.tradingdemo.service.AggregatedNewsService;
+ import com.tradingdemo.service.NewsService;
+ import com.tradingdemo.util.AlertUtils;
+ 
++import javafx.animation.KeyFrame;
++import javafx.animation.Timeline;
++import javafx.application.Platform;
+ import javafx.fxml.FXML;
+ import javafx.fxml.FXMLLoader;
+ import javafx.scene.Parent;
+ import javafx.scene.Scene;
+ import javafx.scene.control.Button;
++import javafx.scene.control.Label;
+ import javafx.scene.control.ListView;
+ import javafx.scene.control.TextArea;
+ import javafx.stage.Stage;
++import javafx.util.Duration;
+ 
+ /**
+  * NewsController - Displays cryptocurrency news and market updates
++ * Integrated with CryptoCompare API for real-time news feeds
+  */
+ public class NewsController {
+ 
+@@ -25,28 +33,123 @@ public class NewsController {
+     @FXML private TextArea newsDetailArea;
+     @FXML private Button refreshButton;
+     @FXML private Button backButton;
++    @FXML private Label statusLabel;
+ 
+     private final NewsService newsService = new NewsService();
++    private final AggregatedNewsService aggregatedNewsService = new AggregatedNewsService();
+     private List<News> newsList;
++    private Timeline autoRefreshTimeline;
++    private boolean useRealApi = true;
++    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("MMM dd, yyyy HH:mm");
+ 
+     @FXML
+     public void initialize() {
+-        newsService.initializeDemoNews();
+         refreshButton.setOnAction(e -> refreshNews());
+         backButton.setOnAction(e -> goBack());
+         
+-        newsListView.setOnMouseClicked(e -> displayNewsDetails());
++        newsListView.setOnMouseClicked(e -> {
++            if (e.getClickCount() == 2) {
++                displayNewsDetails();
++            }
++        });
++        
++        // Single click preview
++        newsListView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
++            if (newVal != null) {
++                displayNewsDetails();
++            }
++        });
+         
++        // Initial load
+         refreshNews();
++        
++        // Start auto-refresh every 2 minutes (120 seconds)
++        startAutoRefresh();
++    }
++
++    /**
++     * Starts automatic news refresh every 2 minutes
++     */
++    private void startAutoRefresh() {
++        autoRefreshTimeline = new Timeline(new KeyFrame(Duration.seconds(120), e -> {
++            System.out.println("Auto-refreshing news...");
++            refreshNews();
++        }));
++        autoRefreshTimeline.setCycleCount(Timeline.INDEFINITE);
++        autoRefreshTimeline.play();
++    }
++
++    /**
++     * Stops auto-refresh timeline
++     */
++    private void stopAutoRefresh() {
++        if (autoRefreshTimeline != null) {
++            autoRefreshTimeline.stop();
++        }
+     }
+ 
+     private void refreshNews() {
+         newsListView.getItems().clear();
++        newsDetailArea.setText("Loading news from multiple sources...");
++        updateStatus("Fetching latest news from CryptoCompare, CryptoPanic, CoinDesk, Cointelegraph...", false);
++        
++        // Try to fetch from real APIs first
++        new Thread(() -> {
++            try {
++                System.out.println("Starting news fetch from aggregated sources...");
++                List<News> apiNews = aggregatedNewsService.getAggregatedNews(100); // Fetch 100 from each source
++                
++                if (apiNews != null && !apiNews.isEmpty()) {
++                    useRealApi = true;
++                    newsList = apiNews;
++                    
++                    Platform.runLater(() -> {
++                        displayNewsList();
++                        updateStatus("✓ Live news: " + apiNews.size() + " articles from 4 sources", true);
++                    });
++                } else {
++                    // Fallback to demo news
++                    loadDemoNews();
++                }
++            } catch (Exception e) {
++                System.err.println("Error loading real news: " + e.getMessage());
++                e.printStackTrace();
++                Platform.runLater(() -> loadDemoNews());
++            }
++        }).start();
++    }
++
++    /**
++     * Loads demo news as fallback
++     */
++    private void loadDemoNews() {
++        useRealApi = false;
++        newsService.initializeDemoNews();
+         newsList = newsService.getAllNews();
++        displayNewsList();
++        updateStatus("⚠ Using demo news (API unavailable)", false);
++    }
++
++    /**
++     * Displays news list in ListView
++     */
++    private void displayNewsList() {
++        newsListView.getItems().clear();
+         
+         for (News news : newsList) {
+-            newsListView.getItems().add(String.format("[%s] %s", 
+-                news.getSource(), news.getTitle()));
++            String formattedDate = news.getPublishedAt() != null ? 
++                news.getPublishedAt().format(DATE_FORMATTER) : "Unknown Date";
++            
++            String displayText = String.format("[%s] %s - %s", 
++                formattedDate, news.getSource(), news.getTitle());
++            
++            newsListView.getItems().add(displayText);
++        }
++        
++        // Auto-select first item
++        if (!newsList.isEmpty()) {
++            newsListView.getSelectionModel().selectFirst();
++            displayNewsDetails();
+         }
+     }
+ 
+@@ -54,21 +157,60 @@ public class NewsController {
+         int index = newsListView.getSelectionModel().getSelectedIndex();
+         if (index >= 0 && index < newsList.size()) {
+             News news = newsList.get(index);
+-            newsDetailArea.setText(String.format(
+-                "Title: %s\n\n" +
+-                "Source: %s\n" +
+-                "Published: %s\n\n" +
+-                "Content:\n%s",
+-                news.getTitle(),
+-                news.getSource(),
+-                news.getPublishedAt(),
+-                news.getContent()
+-            ));
++            
++            StringBuilder details = new StringBuilder();
++            details.append("═══════════════════════════════════════════════════════\n");
++            details.append(news.getTitle().toUpperCase()).append("\n");
++            details.append("═══════════════════════════════════════════════════════\n\n");
++            
++            details.append("📰 Source: ").append(news.getSource()).append("\n");
++            
++            if (news.getPublishedAt() != null) {
++                details.append("📅 Published: ").append(news.getPublishedAt().format(DATE_FORMATTER)).append("\n");
++            }
++            
++            if (news.getTags() != null && !news.getTags().isEmpty()) {
++                details.append("🏷️  Tags: ").append(news.getTags()).append("\n");
++            }
++            
++            if (news.getUrl() != null && !news.getUrl().isEmpty()) {
++                details.append("🔗 URL: ").append(news.getUrl()).append("\n");
++            }
++            
++            details.append("\n───────────────────────────────────────────────────────\n");
++            details.append("ARTICLE CONTENT\n");
++            details.append("───────────────────────────────────────────────────────\n\n");
++            
++            details.append(news.getContent());
++            
++            if (useRealApi) {
++                details.append("\n\n───────────────────────────────────────────────────────\n");
++                details.append("💡 Live news from multiple sources\n");
++                details.append("Sources: CryptoCompare, CryptoPanic\n");
++                details.append("Auto-refresh: Every 2 minutes\n");
++            }
++            
++            newsDetailArea.setText(details.toString());
++        }
++    }
++
++    /**
++     * Updates status label
++     */
++    private void updateStatus(String message, boolean success) {
++        if (statusLabel != null) {
++            statusLabel.setText(message);
++            if (success) {
++                statusLabel.setStyle("-fx-text-fill: #56d364; -fx-font-weight: bold;");
++            } else {
++                statusLabel.setStyle("-fx-text-fill: #f0883e; -fx-font-weight: bold;");
++            }
+         }
+     }
+ 
+     @FXML
+     private void goBack() {
++        stopAutoRefresh();
+         loadView("/com/tradingdemo/view/dashboard.fxml");
+     }
+ 
+@@ -84,3 +226,4 @@ public class NewsController {
+         }
+     }
+ }
++
+diff --git a/src/main/java/com/tradingdemo/controller/TradingController.java b/src/main/java/com/tradingdemo/controller/TradingController.java
+index 4b33b92..d10ca47 100644
+--- a/src/main/java/com/tradingdemo/controller/TradingController.java
++++ b/src/main/java/com/tradingdemo/controller/TradingController.java
+@@ -5,12 +5,15 @@ import java.util.Random;
+ 
+ import com.tradingdemo.model.Order;
+ import com.tradingdemo.service.AuthService;
++import com.tradingdemo.service.BinanceApiService;
++import com.tradingdemo.service.SentimentAnalysisService;
+ import com.tradingdemo.service.TradingService;
+ import com.tradingdemo.service.WalletService;
+ import com.tradingdemo.util.AlertUtils;
+ 
+ import javafx.animation.KeyFrame;
+ import javafx.animation.Timeline;
++import javafx.application.Platform;
+ import javafx.fxml.FXML;
+ import javafx.fxml.FXMLLoader;
+ import javafx.scene.Parent;
+@@ -74,12 +77,20 @@ public class TradingController {
+     @FXML private Button cancelOrderButton;
+     @FXML private Button refreshOrdersButton;
+     
++    // Sentiment Analysis Components
++    @FXML private Label sentimentIndexLabel;
++    @FXML private Label sentimentSignalLabel;
++    @FXML private Label sentimentReasoningLabel;
++    @FXML private Button viewDetailedAnalysisButton;
++    
+     // Store order IDs for the list
+     private java.util.List<Order> displayedOrders = new java.util.ArrayList<>();
+ 
+     private final TradingService tradingService = new TradingService();
+     private final WalletService walletService = new WalletService();
+     private final AuthService authService = new AuthService();
++    private final BinanceApiService binanceApiService = new BinanceApiService();
++    private final SentimentAnalysisService sentimentService = new SentimentAnalysisService();
+ 
+     private static final String[] CRYPTOCURRENCIES = {"BTC", "ETH", "BNB", "ADA", "SOL", "XRP", "DOGE", "USDC"};
+     private static final String[] ORDER_TYPES = {"MARKET", "LIMIT"};
+@@ -91,6 +102,8 @@ public class TradingController {
+     private double currentPrice = BASE_PRICES[0];
+     private Timeline priceUpdateTimeline;
+     private Random random = new Random();
++    private boolean useRealApi = true;
++    private BinanceApiService.TickerData currentTickerData = null;
+ 
+     @FXML
+     public void initialize() {
+@@ -106,6 +119,11 @@ public class TradingController {
+         cancelOrderButton.setOnAction(e -> handleCancelOrder());
+         refreshOrdersButton.setOnAction(e -> refreshOrderList());
+         
++        // Sentiment analysis button
++        if (viewDetailedAnalysisButton != null) {
++            viewDetailedAnalysisButton.setOnAction(e -> showDetailedSentimentAnalysis());
++        }
++        
+         // Initialize chart and price data
+         updateUserBalance();
+         switchToCrypto("BTC", 0);
+@@ -113,6 +131,9 @@ public class TradingController {
+         
+         // Start live price updates
+         startPriceUpdates();
++        
++        // Load initial sentiment data
++        updateSentimentDisplay();
+     }
+ 
+     private void setupComboBoxes() {
+@@ -161,7 +182,6 @@ public class TradingController {
+     
+     private void switchToCrypto(String symbol, int index) {
+         currentSymbol = symbol;
+-        currentPrice = BASE_PRICES[index];
+         symbolCombo.setValue(symbol);
+         
+         // Update visual active state
+@@ -178,9 +198,39 @@ public class TradingController {
+         selectedSymbolLabel.setText(symbol + "/USD");
+         quantityUnitLabel.setText("(" + symbol + ")");
+         
+-        // Update chart
+-        updatePriceChart();
+-        updateMarketStats(symbol, index);
++        // Fetch real-time price for new symbol
++        if (useRealApi) {
++            new Thread(() -> {
++                BinanceApiService.TickerData tickerData = binanceApiService.get24HourTicker(symbol);
++                
++                if (tickerData != null) {
++                    currentTickerData = tickerData;
++                    currentPrice = tickerData.currentPrice;
++                    
++                    Platform.runLater(() -> {
++                        updatePriceLabelsWithRealData();
++                        updateMarketStatsWithRealData();
++                        updatePriceChart();
++                        // Update sentiment for the new crypto
++                        updateSentimentDisplay();
++                    });
++                } else {
++                    currentPrice = BASE_PRICES[index];
++                    Platform.runLater(() -> {
++                        updatePriceChart();
++                        updateMarketStats(symbol, index);
++                        // Update sentiment even with fallback data
++                        updateSentimentDisplay();
++                    });
++                }
++            }).start();
++        } else {
++            currentPrice = BASE_PRICES[index];
++            updatePriceChart();
++            updateMarketStats(symbol, index);
++            // Update sentiment with simulated data
++            updateSentimentDisplay();
++        }
+     }
+     
+     private void updatePriceChart() {
+@@ -335,6 +385,29 @@ public class TradingController {
+         }
+     }
+     
++    /**
++     * Updates price labels with real-time Binance data
++     */
++    private void updatePriceLabelsWithRealData() {
++        if (currentTickerData == null) {
++            updatePriceLabels();
++            return;
++        }
++        
++        currentPriceLabel.setText(String.format("$%,.2f", currentTickerData.currentPrice));
++        priceField.setText(String.format("%.2f", currentTickerData.currentPrice));
++        
++        // Real price change percentage from API
++        double changePercent = currentTickerData.priceChangePercent;
++        boolean isPositive = changePercent > 0;
++        priceChangeLabel.setText(String.format("%s%.2f%%", isPositive ? "+" : "", changePercent));
++        priceChangeLabel.setStyle(String.format("-fx-text-fill: %s; -fx-font-size: 12;", 
++            isPositive ? "#56d364" : "#f85149"));
++    }
++    
++    /**
++     * Updates price labels with simulated data (fallback)
++     */
+     private void updatePriceLabels() {
+         currentPriceLabel.setText(String.format("$%,.2f", currentPrice));
+         priceField.setText(String.format("%.2f", currentPrice));
+@@ -347,6 +420,42 @@ public class TradingController {
+             isPositive ? "#56d364" : "#f85149"));
+     }
+     
++    /**
++     * Updates market stats with real-time Binance data
++     */
++    private void updateMarketStatsWithRealData() {
++        if (currentTickerData == null) {
++            return;
++        }
++        
++        // Real 24h high/low from Binance
++        highLabel.setText(String.format("$%,.2f", currentTickerData.highPrice));
++        lowLabel.setText(String.format("$%,.2f", currentTickerData.lowPrice));
++        
++        // Real 24h volume (quote volume is in USD)
++        volumeLabel.setText(formatVolume(currentTickerData.quoteVolume));
++        
++        // Estimate market cap (supply data would need additional API)
++        String[] supplies = {"19.5M", "120M", "150M", "35B", "450M", "100B", "141B", "24B"};
++        double[] supplyValues = {19500000, 120000000, 150000000, 35000000000.0, 450000000, 100000000000.0, 141000000000.0, 24000000000.0};
++        
++        int symbolIndex = java.util.Arrays.asList(CRYPTOCURRENCIES).indexOf(currentSymbol);
++        if (symbolIndex >= 0 && symbolIndex < supplyValues.length) {
++            double marketCap = currentPrice * supplyValues[symbolIndex];
++            marketCapLabel.setText(formatVolume(marketCap));
++            supplyLabel.setText(supplies[symbolIndex] + " " + currentSymbol);
++        }
++        
++        // ATH data (would need historical API)
++        String[] aths = {"$69,000", "$4,878", "$686", "$3.10", "$260", "$3.84", "$0.74", "$1.17"};
++        if (symbolIndex >= 0 && symbolIndex < aths.length) {
++            athLabel.setText(aths[symbolIndex]);
++        }
++    }
++    
++    /**
++     * Updates market stats with simulated data (fallback)
++     */
+     private void updateMarketStats(String symbol, int index) {
+         // Simulate market statistics
+         double high = currentPrice * 1.05;
+@@ -390,22 +499,82 @@ public class TradingController {
+     }
+     
+     private void startPriceUpdates() {
+-        // Update price every 3 seconds
+-        priceUpdateTimeline = new Timeline(new KeyFrame(Duration.seconds(3), event -> {
+-            // Simulate price movement
+-            currentPrice = currentPrice * (1 + (random.nextDouble() - 0.5) * 0.02); // +/- 1% change
+-            updatePriceLabels();
++        // Test API connection first
++        new Thread(() -> {
++            boolean apiAvailable = binanceApiService.testConnection();
++            useRealApi = apiAvailable;
++            
++            Platform.runLater(() -> {
++                if (useRealApi) {
++                    System.out.println("✓ Connected to Binance API - using real-time data");
++                    balanceHeaderLabel.setStyle("-fx-text-fill: #56d364; -fx-font-size: 14; -fx-font-weight: bold;");
++                } else {
++                    System.out.println("⚠ Binance API unavailable - using simulated data");
++                    AlertUtils.showWarning("API Status", "Binance API is unavailable.\nUsing simulated prices as fallback.");
++                }
++            });
++        }).start();
++        
++        // Update price every 5 seconds (real-time updates)
++        priceUpdateTimeline = new Timeline(new KeyFrame(Duration.seconds(5), event -> {
++            if (useRealApi) {
++                // Fetch real price from Binance API in background thread
++                new Thread(() -> {
++                    try {
++                        BinanceApiService.TickerData tickerData = binanceApiService.get24HourTicker(currentSymbol);
++                        
++                        if (tickerData != null) {
++                            currentTickerData = tickerData;
++                            currentPrice = tickerData.currentPrice;
++                            
++                            Platform.runLater(() -> {
++                                updatePriceLabelsWithRealData();
++                                updateMarketStatsWithRealData();
++                            });
++                        } else {
++                            // API call failed, switch to fallback
++                            Platform.runLater(() -> {
++                                if (useRealApi) {
++                                    useRealApi = false;
++                                    System.err.println("⚠ Binance API call failed - switching to simulated data");
++                                    AlertUtils.showWarning("API Error", "Lost connection to Binance API.\nSwitching to simulated prices.");
++                                }
++                            });
++                            simulatePriceMovement();
++                        }
++                    } catch (Exception e) {
++                        System.err.println("Error fetching price: " + e.getMessage());
++                        simulatePriceMovement();
++                    }
++                }).start();
++            } else {
++                // Use simulated price movement
++                simulatePriceMovement();
++            }
+             
+             // Check stop loss and take profit triggers for all open positions
+             checkStopLossTakeProfitTriggers();
+             
+             // Update P/L display in order list
+             refreshOrderList();
++            
++            // Update sentiment every 60 seconds (every 12th iteration at 5-second intervals)
++            if (priceUpdateTimeline.getCurrentTime().toSeconds() % 60 < 5) {
++                updateSentimentDisplay();
++            }
+         }));
+         priceUpdateTimeline.setCycleCount(Timeline.INDEFINITE);
+         priceUpdateTimeline.play();
+     }
+     
++    /**
++     * Simulates price movement when API is unavailable
++     */
++    private void simulatePriceMovement() {
++        currentPrice = currentPrice * (1 + (random.nextDouble() - 0.5) * 0.02); // +/- 1% change
++        Platform.runLater(this::updatePriceLabels);
++    }
++    
+     /**
+      * Check all open positions for stop loss and take profit triggers
+      * Automatically closes positions when SL or TP is hit
+@@ -714,6 +883,124 @@ public class TradingController {
+         
+         return totalQuantity > 0 ? totalCost / totalQuantity : 0;
+     }
++    
++    /**
++     * Updates the sentiment display panel with crypto-specific sentiment
++     */
++    private void updateSentimentDisplay() {
++        if (sentimentIndexLabel == null) return;
++        
++        new Thread(() -> {
++            try {
++                // Get sentiment for the currently selected cryptocurrency
++                SentimentAnalysisService.SentimentData sentiment = sentimentService.getCryptoSentiment(currentSymbol);
++                
++                if (sentiment != null) {
++                    Platform.runLater(() -> {
++                        // Update index label with crypto symbol
++                        String cryptoName = getCryptoFullName(currentSymbol);
++                        sentimentIndexLabel.setText(sentiment.fearGreedIndex + "/100 - " + sentiment.classification);
++                        
++                        // Update recommendation label with color coding
++                        sentimentSignalLabel.setText(sentiment.recommendation);
++                        if ("BUY".equals(sentiment.signal) || "STRONG BUY".equals(sentiment.recommendation)) {
++                            sentimentSignalLabel.setStyle("-fx-text-fill: #56d364; -fx-font-size: 11; -fx-font-weight: bold;");
++                        } else if ("SELL".equals(sentiment.signal) || "STRONG SELL".equals(sentiment.recommendation)) {
++                            sentimentSignalLabel.setStyle("-fx-text-fill: #f85149; -fx-font-size: 11; -fx-font-weight: bold;");
++                        } else {
++                            sentimentSignalLabel.setStyle("-fx-text-fill: #f0883e; -fx-font-size: 11; -fx-font-weight: bold;");
++                        }
++                        
++                        // Update reasoning (shortened for display)
++                        String shortReasoning = sentiment.reasoning.length() > 120 ? 
++                            sentiment.reasoning.substring(0, 117) + "..." : sentiment.reasoning;
++                        sentimentReasoningLabel.setText(shortReasoning);
++                        
++                        System.out.println("Updated sentiment for " + cryptoName + ": " + sentiment.recommendation);
++                    });
++                } else {
++                    Platform.runLater(() -> {
++                        sentimentIndexLabel.setText("N/A");
++                        sentimentSignalLabel.setText("--");
++                        sentimentReasoningLabel.setText("Unable to fetch sentiment data for " + currentSymbol);
++                    });
++                }
++            } catch (Exception e) {
++                System.err.println("Error updating sentiment: " + e.getMessage());
++                Platform.runLater(() -> {
++                    sentimentIndexLabel.setText("Error");
++                    sentimentSignalLabel.setText("--");
++                    sentimentReasoningLabel.setText("Sentiment service unavailable");
++                });
++            }
++        }).start();
++    }
++    
++    /**
++     * Gets full cryptocurrency name from symbol
++     */
++    private String getCryptoFullName(String symbol) {
++        switch (symbol.toUpperCase()) {
++            case "BTC": return "Bitcoin";
++            case "ETH": return "Ethereum";
++            case "BNB": return "Binance Coin";
++            case "ADA": return "Cardano";
++            case "SOL": return "Solana";
++            case "XRP": return "Ripple";
++            case "DOGE": return "Dogecoin";
++            case "USDC": return "USD Coin";
++            default: return symbol;
++        }
++    }
++    
++    /**
++     * Shows detailed sentiment analysis in a dialog
++     */
++    private void showDetailedSentimentAnalysis() {
++        new Thread(() -> {
++            // Get crypto-specific sentiment analysis
++            SentimentAnalysisService.SentimentData sentiment = sentimentService.getCryptoSentiment(currentSymbol);
++            
++            if (sentiment != null) {
++                String cryptoName = getCryptoFullName(currentSymbol);
++                StringBuilder analysis = new StringBuilder();
++                analysis.append("═══════════════════════════════════════════════\n");
++                analysis.append("        ").append(cryptoName.toUpperCase()).append(" SENTIMENT ANALYSIS\n");
++                analysis.append("═══════════════════════════════════════════════\n\n");
++                
++                if (sentiment.currentPrice > 0) {
++                    analysis.append("Current Price: $").append(String.format("%,.2f", sentiment.currentPrice)).append("\n");
++                    analysis.append("24h Change: ").append(String.format("%+.2f%%", sentiment.priceChange24h)).append("\n");
++                    analysis.append("24h Volume: $").append(String.format("%,.0f", sentiment.volume24h)).append("\n\n");
++                }
++                
++                analysis.append("Fear & Greed Index: ").append(sentiment.fearGreedIndex).append("/100\n");
++                analysis.append("Classification: ").append(sentiment.classification.toUpperCase()).append("\n\n");
++                
++                analysis.append("───────────────────────────────────────────────\n");
++                analysis.append("RECOMMENDATION: ").append(sentiment.recommendation).append("\n");
++                analysis.append("Signal: ").append(sentiment.signal).append("\n");
++                analysis.append("Confidence: ").append(sentiment.confidence).append("%\n");
++                analysis.append("───────────────────────────────────────────────\n\n");
++                
++                analysis.append(cryptoName.toUpperCase()).append(" ANALYSIS:\n");
++                analysis.append(sentiment.reasoning).append("\n\n");
++                
++                analysis.append("───────────────────────────────────────────────\n");
++                analysis.append("💡 This analysis combines market-wide Fear & Greed\n");
++                analysis.append("   Index with ").append(cryptoName).append("-specific price action and volume.\n");
++                
++                String detailedAnalysis = analysis.toString();
++                Platform.runLater(() -> {
++                    AlertUtils.showInfo(cryptoName + " Sentiment Analysis", detailedAnalysis);
++                });
++            } else {
++                Platform.runLater(() -> {
++                    AlertUtils.showError("Error", "Unable to fetch sentiment data for " + currentSymbol);
++                });
++            }
++        }).start();
++    }
+ 
+     @FXML
+     private void goBack() {
+diff --git a/src/main/java/com/tradingdemo/model/News.java b/src/main/java/com/tradingdemo/model/News.java
+index 0c39215..f483178 100644
+--- a/src/main/java/com/tradingdemo/model/News.java
++++ b/src/main/java/com/tradingdemo/model/News.java
+@@ -11,6 +11,10 @@ public class News {
+     private String content;
+     private String source;
+     private LocalDateTime publishedAt;
++    private String imageUrl;
++    private String url;
++    private String tags;
++    private String categories;
+ 
+     // Constructors
+     public News() {
+@@ -64,6 +68,38 @@ public class News {
+         this.publishedAt = publishedAt;
+     }
+ 
++    public String getImageUrl() {
++        return imageUrl;
++    }
++
++    public void setImageUrl(String imageUrl) {
++        this.imageUrl = imageUrl;
++    }
++
++    public String getUrl() {
++        return url;
++    }
++
++    public void setUrl(String url) {
++        this.url = url;
++    }
++
++    public String getTags() {
++        return tags;
++    }
++
++    public void setTags(String tags) {
++        this.tags = tags;
++    }
++
++    public String getCategories() {
++        return categories;
++    }
++
++    public void setCategories(String categories) {
++        this.categories = categories;
++    }
++
+     @Override
+     public String toString() {
+         return "News{" +
+@@ -73,3 +109,4 @@ public class News {
+                 '}';
+     }
+ }
++
+diff --git a/src/main/resources/com/tradingdemo/view/news.fxml b/src/main/resources/com/tradingdemo/view/news.fxml
+index 27a2f08..dfdec37 100644
+--- a/src/main/resources/com/tradingdemo/view/news.fxml
++++ b/src/main/resources/com/tradingdemo/view/news.fxml
+@@ -11,6 +11,8 @@
+         <HBox spacing="10" style="-fx-background-color: #252535; -fx-padding: 15;">
+             <Button fx:id="backButton" text="← Back" style="-fx-padding: 8 15; -fx-background-color: #555555; -fx-text-fill: white; -fx-cursor: hand;"/>
+             <Label text="Market News" style="-fx-text-fill: #00d4ff; -fx-font-size: 18; -fx-font-weight: bold; -fx-pref-width: 300;"/>
++            <Label fx:id="statusLabel" text="Ready" style="-fx-text-fill: #00d4ff; -fx-font-size: 12; -fx-pref-width: 400;"/>
++            <Region HBox.hgrow="ALWAYS"/>
+             <Button fx:id="refreshButton" text="🔄 Refresh" style="-fx-padding: 8 15; -fx-background-color: #00d4ff; -fx-text-fill: #1e1e2e; -fx-font-weight: bold; -fx-cursor: hand;"/>
+         </HBox>
+     </top>
+diff --git a/src/main/resources/com/tradingdemo/view/trading.fxml b/src/main/resources/com/tradingdemo/view/trading.fxml
+index 3536f05..9786323 100644
+--- a/src/main/resources/com/tradingdemo/view/trading.fxml
++++ b/src/main/resources/com/tradingdemo/view/trading.fxml
+@@ -157,6 +157,24 @@
+ 
+                     <!-- Place Order Button -->
+                     <Button fx:id="placeOrderButton" text="PLACE BUY ORDER" style="-fx-padding: 14; -fx-font-size: 14; -fx-font-weight: bold; -fx-background-color: #238636; -fx-text-fill: white; -fx-cursor: hand; -fx-border-radius: 6; -fx-background-radius: 6; -fx-pref-width: 310;"/>
++                    
++                    <!-- Market Sentiment Panel -->
++                    <VBox spacing="8" style="-fx-background-color: #0d1117; -fx-padding: 12; -fx-border-color: #30363d; -fx-border-radius: 6; -fx-background-radius: 6; -fx-border-width: 2;">
++                        <Label text="📊 Market Sentiment" style="-fx-text-fill: #58a6ff; -fx-font-size: 12; -fx-font-weight: bold;"/>
++                        <HBox spacing="10">
++                            <VBox spacing="2">
++                                <Label text="Fear &amp; Greed:" style="-fx-text-fill: #8b949e; -fx-font-size: 10;"/>
++                                <Label fx:id="sentimentIndexLabel" text="Loading..." style="-fx-text-fill: #c9d1d9; -fx-font-size: 11; -fx-font-weight: bold;"/>
++                            </VBox>
++                            <Region HBox.hgrow="ALWAYS"/>
++                            <VBox spacing="2">
++                                <Label text="Recommendation:" style="-fx-text-fill: #8b949e; -fx-font-size: 10;"/>
++                                <Label fx:id="sentimentSignalLabel" text="--" style="-fx-text-fill: #56d364; -fx-font-size: 11; -fx-font-weight: bold;"/>
++                            </VBox>
++                        </HBox>
++                        <Label fx:id="sentimentReasoningLabel" text="Analyzing market sentiment..." wrapText="true" style="-fx-text-fill: #6e7681; -fx-font-size: 9;"/>
++                        <Button fx:id="viewDetailedAnalysisButton" text="View Detailed Analysis" style="-fx-padding: 6 12; -fx-background-color: #21262d; -fx-text-fill: #58a6ff; -fx-cursor: hand; -fx-border-radius: 4; -fx-background-radius: 4; -fx-font-size: 10;"/>
++                    </VBox>
+                 </VBox>
+ 
+                 <!-- Pending Orders -->
+diff --git a/target/classes/GenerateAdminHash.class b/target/classes/GenerateAdminHash.class
+index d739b36..dc69e9b 100644
+Binary files a/target/classes/GenerateAdminHash.class and b/target/classes/GenerateAdminHash.class differ
+diff --git a/target/classes/TestHash.class b/target/classes/TestHash.class
+index 56006d8..0a10037 100644
+Binary files a/target/classes/TestHash.class and b/target/classes/TestHash.class differ
+diff --git a/target/classes/com/tradingdemo/MainApp.class b/target/classes/com/tradingdemo/MainApp.class
+index 52cadc2..95ccb85 100644
+Binary files a/target/classes/com/tradingdemo/MainApp.class and b/target/classes/com/tradingdemo/MainApp.class differ
+diff --git a/target/classes/com/tradingdemo/config/DatabaseConnection.class b/target/classes/com/tradingdemo/config/DatabaseConnection.class
+index 7617408..4cb2878 100644
+Binary files a/target/classes/com/tradingdemo/config/DatabaseConnection.class and b/target/classes/com/tradingdemo/config/DatabaseConnection.class differ
+diff --git a/target/classes/com/tradingdemo/controller/AdminController.class b/target/classes/com/tradingdemo/controller/AdminController.class
+index 3a74ad8..87fadb4 100644
+Binary files a/target/classes/com/tradingdemo/controller/AdminController.class and b/target/classes/com/tradingdemo/controller/AdminController.class differ
+diff --git a/target/classes/com/tradingdemo/controller/DashboardController.class b/target/classes/com/tradingdemo/controller/DashboardController.class
+index 6b68845..ca7b86a 100644
+Binary files a/target/classes/com/tradingdemo/controller/DashboardController.class and b/target/classes/com/tradingdemo/controller/DashboardController.class differ
+diff --git a/target/classes/com/tradingdemo/controller/HistoryController.class b/target/classes/com/tradingdemo/controller/HistoryController.class
+index 9198e67..2235f57 100644
+Binary files a/target/classes/com/tradingdemo/controller/HistoryController.class and b/target/classes/com/tradingdemo/controller/HistoryController.class differ
+diff --git a/target/classes/com/tradingdemo/controller/LoginController.class b/target/classes/com/tradingdemo/controller/LoginController.class
+index e3ec5f4..7974b5b 100644
+Binary files a/target/classes/com/tradingdemo/controller/LoginController.class and b/target/classes/com/tradingdemo/controller/LoginController.class differ
+diff --git a/target/classes/com/tradingdemo/controller/NewsController.class b/target/classes/com/tradingdemo/controller/NewsController.class
+index 22c8115..d93f027 100644
+Binary files a/target/classes/com/tradingdemo/controller/NewsController.class and b/target/classes/com/tradingdemo/controller/NewsController.class differ
+diff --git a/target/classes/com/tradingdemo/controller/ProfilController.class b/target/classes/com/tradingdemo/controller/ProfilController.class
+index 49c1c86..98e2c57 100644
+Binary files a/target/classes/com/tradingdemo/controller/ProfilController.class and b/target/classes/com/tradingdemo/controller/ProfilController.class differ
+diff --git a/target/classes/com/tradingdemo/controller/RegisterController.class b/target/classes/com/tradingdemo/controller/RegisterController.class
+index dd9d31d..5766650 100644
+Binary files a/target/classes/com/tradingdemo/controller/RegisterController.class and b/target/classes/com/tradingdemo/controller/RegisterController.class differ
+diff --git a/target/classes/com/tradingdemo/controller/TradingController.class b/target/classes/com/tradingdemo/controller/TradingController.class
+index 3901ae9..2f53695 100644
+Binary files a/target/classes/com/tradingdemo/controller/TradingController.class and b/target/classes/com/tradingdemo/controller/TradingController.class differ
+diff --git a/target/classes/com/tradingdemo/controller/WalletController.class b/target/classes/com/tradingdemo/controller/WalletController.class
+index 6d6b085..1576402 100644
+Binary files a/target/classes/com/tradingdemo/controller/WalletController.class and b/target/classes/com/tradingdemo/controller/WalletController.class differ
+diff --git a/target/classes/com/tradingdemo/dao/NewsDAO.class b/target/classes/com/tradingdemo/dao/NewsDAO.class
+index 5a82e1f..2205105 100644
+Binary files a/target/classes/com/tradingdemo/dao/NewsDAO.class and b/target/classes/com/tradingdemo/dao/NewsDAO.class differ
+diff --git a/target/classes/com/tradingdemo/dao/OrderDAO.class b/target/classes/com/tradingdemo/dao/OrderDAO.class
+index 4ada09f..483c776 100644
+Binary files a/target/classes/com/tradingdemo/dao/OrderDAO.class and b/target/classes/com/tradingdemo/dao/OrderDAO.class differ
+diff --git a/target/classes/com/tradingdemo/dao/PredictionDAO.class b/target/classes/com/tradingdemo/dao/PredictionDAO.class
+index 5ab4898..c5601f3 100644
+Binary files a/target/classes/com/tradingdemo/dao/PredictionDAO.class and b/target/classes/com/tradingdemo/dao/PredictionDAO.class differ
+diff --git a/target/classes/com/tradingdemo/dao/ReclamationDAO.class b/target/classes/com/tradingdemo/dao/ReclamationDAO.class
+index 1b7accf..5f2327b 100644
+Binary files a/target/classes/com/tradingdemo/dao/ReclamationDAO.class and b/target/classes/com/tradingdemo/dao/ReclamationDAO.class differ
+diff --git a/target/classes/com/tradingdemo/dao/TradeDAO.class b/target/classes/com/tradingdemo/dao/TradeDAO.class
+index 9822bcf..cf06c28 100644
+Binary files a/target/classes/com/tradingdemo/dao/TradeDAO.class and b/target/classes/com/tradingdemo/dao/TradeDAO.class differ
+diff --git a/target/classes/com/tradingdemo/dao/UserDAO.class b/target/classes/com/tradingdemo/dao/UserDAO.class
+index da7d1e5..fbaa571 100644
+Binary files a/target/classes/com/tradingdemo/dao/UserDAO.class and b/target/classes/com/tradingdemo/dao/UserDAO.class differ
+diff --git a/target/classes/com/tradingdemo/dao/WalletDAO.class b/target/classes/com/tradingdemo/dao/WalletDAO.class
+index 49cec5d..b2d3a7e 100644
+Binary files a/target/classes/com/tradingdemo/dao/WalletDAO.class and b/target/classes/com/tradingdemo/dao/WalletDAO.class differ
+diff --git a/target/classes/com/tradingdemo/model/News.class b/target/classes/com/tradingdemo/model/News.class
+index 79df682..00aa667 100644
+Binary files a/target/classes/com/tradingdemo/model/News.class and b/target/classes/com/tradingdemo/model/News.class differ
+diff --git a/target/classes/com/tradingdemo/model/Order.class b/target/classes/com/tradingdemo/model/Order.class
+index 312d237..d23ac2c 100644
+Binary files a/target/classes/com/tradingdemo/model/Order.class and b/target/classes/com/tradingdemo/model/Order.class differ
+diff --git a/target/classes/com/tradingdemo/model/Prediction.class b/target/classes/com/tradingdemo/model/Prediction.class
+index 157210f..af5724d 100644
+Binary files a/target/classes/com/tradingdemo/model/Prediction.class and b/target/classes/com/tradingdemo/model/Prediction.class differ
+diff --git a/target/classes/com/tradingdemo/model/Reclamation.class b/target/classes/com/tradingdemo/model/Reclamation.class
+index c62eb2e..102f95e 100644
+Binary files a/target/classes/com/tradingdemo/model/Reclamation.class and b/target/classes/com/tradingdemo/model/Reclamation.class differ
+diff --git a/target/classes/com/tradingdemo/model/Trade.class b/target/classes/com/tradingdemo/model/Trade.class
+index e4cecc5..adeffc6 100644
+Binary files a/target/classes/com/tradingdemo/model/Trade.class and b/target/classes/com/tradingdemo/model/Trade.class differ
+diff --git a/target/classes/com/tradingdemo/model/User.class b/target/classes/com/tradingdemo/model/User.class
+index 6b010bd..168353a 100644
+Binary files a/target/classes/com/tradingdemo/model/User.class and b/target/classes/com/tradingdemo/model/User.class differ
+diff --git a/target/classes/com/tradingdemo/model/WalletItem.class b/target/classes/com/tradingdemo/model/WalletItem.class
+index c636ff8..10347dc 100644
+Binary files a/target/classes/com/tradingdemo/model/WalletItem.class and b/target/classes/com/tradingdemo/model/WalletItem.class differ
+diff --git a/target/classes/com/tradingdemo/service/AuthService.class b/target/classes/com/tradingdemo/service/AuthService.class
+index 6aaf90c..a61e564 100644
+Binary files a/target/classes/com/tradingdemo/service/AuthService.class and b/target/classes/com/tradingdemo/service/AuthService.class differ
+diff --git a/target/classes/com/tradingdemo/service/TradingService.class b/target/classes/com/tradingdemo/service/TradingService.class
+index 64d0be4..1fe5956 100644
+Binary files a/target/classes/com/tradingdemo/service/TradingService.class and b/target/classes/com/tradingdemo/service/TradingService.class differ
+diff --git a/target/classes/com/tradingdemo/service/UserService.class b/target/classes/com/tradingdemo/service/UserService.class
+deleted file mode 100644
+index db338ac..0000000
+Binary files a/target/classes/com/tradingdemo/service/UserService.class and /dev/null differ
+diff --git a/target/classes/com/tradingdemo/view/news.fxml b/target/classes/com/tradingdemo/view/news.fxml
+index 27a2f08..dfdec37 100644
+--- a/target/classes/com/tradingdemo/view/news.fxml
++++ b/target/classes/com/tradingdemo/view/news.fxml
+@@ -11,6 +11,8 @@
+         <HBox spacing="10" style="-fx-background-color: #252535; -fx-padding: 15;">
+             <Button fx:id="backButton" text="← Back" style="-fx-padding: 8 15; -fx-background-color: #555555; -fx-text-fill: white; -fx-cursor: hand;"/>
+             <Label text="Market News" style="-fx-text-fill: #00d4ff; -fx-font-size: 18; -fx-font-weight: bold; -fx-pref-width: 300;"/>
++            <Label fx:id="statusLabel" text="Ready" style="-fx-text-fill: #00d4ff; -fx-font-size: 12; -fx-pref-width: 400;"/>
++            <Region HBox.hgrow="ALWAYS"/>
+             <Button fx:id="refreshButton" text="🔄 Refresh" style="-fx-padding: 8 15; -fx-background-color: #00d4ff; -fx-text-fill: #1e1e2e; -fx-font-weight: bold; -fx-cursor: hand;"/>
+         </HBox>
+     </top>
+diff --git a/target/classes/com/tradingdemo/view/trading.fxml b/target/classes/com/tradingdemo/view/trading.fxml
+index 3536f05..9786323 100644
+--- a/target/classes/com/tradingdemo/view/trading.fxml
++++ b/target/classes/com/tradingdemo/view/trading.fxml
+@@ -157,6 +157,24 @@
+ 
+                     <!-- Place Order Button -->
+                     <Button fx:id="placeOrderButton" text="PLACE BUY ORDER" style="-fx-padding: 14; -fx-font-size: 14; -fx-font-weight: bold; -fx-background-color: #238636; -fx-text-fill: white; -fx-cursor: hand; -fx-border-radius: 6; -fx-background-radius: 6; -fx-pref-width: 310;"/>
++                    
++                    <!-- Market Sentiment Panel -->
++                    <VBox spacing="8" style="-fx-background-color: #0d1117; -fx-padding: 12; -fx-border-color: #30363d; -fx-border-radius: 6; -fx-background-radius: 6; -fx-border-width: 2;">
++                        <Label text="📊 Market Sentiment" style="-fx-text-fill: #58a6ff; -fx-font-size: 12; -fx-font-weight: bold;"/>
++                        <HBox spacing="10">
++                            <VBox spacing="2">
++                                <Label text="Fear &amp; Greed:" style="-fx-text-fill: #8b949e; -fx-font-size: 10;"/>
++                                <Label fx:id="sentimentIndexLabel" text="Loading..." style="-fx-text-fill: #c9d1d9; -fx-font-size: 11; -fx-font-weight: bold;"/>
++                            </VBox>
++                            <Region HBox.hgrow="ALWAYS"/>
++                            <VBox spacing="2">
++                                <Label text="Recommendation:" style="-fx-text-fill: #8b949e; -fx-font-size: 10;"/>
++                                <Label fx:id="sentimentSignalLabel" text="--" style="-fx-text-fill: #56d364; -fx-font-size: 11; -fx-font-weight: bold;"/>
++                            </VBox>
++                        </HBox>
++                        <Label fx:id="sentimentReasoningLabel" text="Analyzing market sentiment..." wrapText="true" style="-fx-text-fill: #6e7681; -fx-font-size: 9;"/>
++                        <Button fx:id="viewDetailedAnalysisButton" text="View Detailed Analysis" style="-fx-padding: 6 12; -fx-background-color: #21262d; -fx-text-fill: #58a6ff; -fx-cursor: hand; -fx-border-radius: 4; -fx-background-radius: 4; -fx-font-size: 10;"/>
++                    </VBox>
+                 </VBox>
+ 
+                 <!-- Pending Orders -->
+diff --git a/target/crypto-trading-demo-1.0.0.jar b/target/crypto-trading-demo-1.0.0.jar
+index b6242c9..9ad4f3a 100644
+Binary files a/target/crypto-trading-demo-1.0.0.jar and b/target/crypto-trading-demo-1.0.0.jar differ
+diff --git a/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst b/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
+index 5a1f46d..a3f39ec 100644
+--- a/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
++++ b/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
+@@ -1,36 +1,44 @@
+-com\tradingdemo\controller\AdminController.class
+-com\tradingdemo\dao\WalletDAO.class
+ GenerateAdminHash.class
+-com\tradingdemo\controller\HistoryController.class
+-com\tradingdemo\controller\NewsController.class
+-com\tradingdemo\controller\DashboardController.class
+-com\tradingdemo\controller\resetController.class
+-com\tradingdemo\service\WalletService.class
+-com\tradingdemo\util\AlertUtils.class
+-com\tradingdemo\model\Trade.class
+-com\tradingdemo\model\WalletItem.class
+-com\tradingdemo\dao\ReclamationDAO.class
+-com\tradingdemo\model\Prediction.class
+-com\tradingdemo\controller\WalletController.class
+-com\tradingdemo\dao\UserDAO.class
+-com\tradingdemo\dao\NewsDAO.class
+-com\tradingdemo\service\PredictionService.class
+-com\tradingdemo\service\NewsService.class
+-com\tradingdemo\model\Order.class
+-com\tradingdemo\model\Reclamation.class
+-com\tradingdemo\util\PasswordUtils.class
+-com\tradingdemo\controller\TradingController.class
++com/tradingdemo/model/Prediction.class
++com/tradingdemo/MainApp.class
++com/tradingdemo/dao/WalletDAO.class
++com/tradingdemo/model/News.class
++com/tradingdemo/model/User.class
++com/tradingdemo/controller/DashboardController.class
++com/tradingdemo/controller/AdminController.class
++com/tradingdemo/service/CryptoCompareNewsService.class
+ TestHash.class
+-com\tradingdemo\dao\OrderDAO.class
+-com\tradingdemo\service\AuthService.class
+-com\tradingdemo\service\TradingService.class
+-com\tradingdemo\controller\LoginController.class
+-com\tradingdemo\controller\RegisterController.class
+-com\tradingdemo\dao\TradeDAO.class
+-com\tradingdemo\config\DatabaseConnection.class
+-com\tradingdemo\controller\ProfilController.class
+-com\tradingdemo\service\UserService.class
+-com\tradingdemo\dao\PredictionDAO.class
+-com\tradingdemo\model\News.class
+-com\tradingdemo\MainApp.class
+-com\tradingdemo\model\User.class
++com/tradingdemo/dao/NewsDAO.class
++com/tradingdemo/service/CoinDeskNewsService.class
++com/tradingdemo/model/Order.class
++com/tradingdemo/dao/UserDAO.class
++com/tradingdemo/service/BinanceApiService$TickerData.class
++com/tradingdemo/dao/TradeDAO.class
++com/tradingdemo/controller/WalletController.class
++com/tradingdemo/model/Reclamation.class
++com/tradingdemo/service/WalletService.class
++com/tradingdemo/service/AggregatedNewsService.class
++com/tradingdemo/config/DatabaseConnection.class
++com/tradingdemo/service/PredictionService.class
++com/tradingdemo/service/SentimentAnalysisService.class
++com/tradingdemo/service/CoinTelegraphNewsService.class
++com/tradingdemo/util/PasswordUtils.class
++com/tradingdemo/service/NewsService.class
++com/tradingdemo/service/AuthService.class
++com/tradingdemo/controller/ProfilController.class
++com/tradingdemo/dao/PredictionDAO.class
++com/tradingdemo/model/Trade.class
++com/tradingdemo/service/BinanceApiService.class
++com/tradingdemo/util/AlertUtils.class
++com/tradingdemo/controller/RegisterController.class
++com/tradingdemo/controller/resetController.class
++com/tradingdemo/controller/TradingController.class
++com/tradingdemo/controller/NewsController.class
++com/tradingdemo/model/WalletItem.class
++com/tradingdemo/service/TradingService.class
++com/tradingdemo/dao/OrderDAO.class
++com/tradingdemo/controller/LoginController.class
++com/tradingdemo/controller/HistoryController.class
++com/tradingdemo/service/CryptoPanicNewsService.class
++com/tradingdemo/dao/ReclamationDAO.class
++com/tradingdemo/service/SentimentAnalysisService$SentimentData.class
+diff --git a/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst b/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
+index 5bc5565..bd0ccb0 100644
+--- a/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
++++ b/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
+@@ -1,36 +1,42 @@
+-C:\Users\MSI\Desktop\projet\Trading_wolfers\src\main\java\com\tradingdemo\controller\NewsController.java
+-C:\Users\MSI\Desktop\projet\Trading_wolfers\src\main\java\com\tradingdemo\dao\TradeDAO.java
+-C:\Users\MSI\Desktop\projet\Trading_wolfers\src\main\java\com\tradingdemo\model\Reclamation.java
+-C:\Users\MSI\Desktop\projet\Trading_wolfers\src\main\java\com\tradingdemo\dao\NewsDAO.java
+-C:\Users\MSI\Desktop\projet\Trading_wolfers\src\main\java\com\tradingdemo\model\Trade.java
+-C:\Users\MSI\Desktop\projet\Trading_wolfers\src\main\java\com\tradingdemo\controller\AdminController.java
+-C:\Users\MSI\Desktop\projet\Trading_wolfers\src\main\java\com\tradingdemo\dao\OrderDAO.java
+-C:\Users\MSI\Desktop\projet\Trading_wolfers\src\main\java\com\tradingdemo\service\UserService.java
+-C:\Users\MSI\Desktop\projet\Trading_wolfers\src\main\java\com\tradingdemo\util\PasswordUtils.java
+-C:\Users\MSI\Desktop\projet\Trading_wolfers\src\main\java\com\tradingdemo\MainApp.java
+-C:\Users\MSI\Desktop\projet\Trading_wolfers\src\main\java\com\tradingdemo\controller\ProfilController.java
+-C:\Users\MSI\Desktop\projet\Trading_wolfers\src\main\java\com\tradingdemo\controller\WalletController.java
+-C:\Users\MSI\Desktop\projet\Trading_wolfers\src\main\java\com\tradingdemo\dao\UserDAO.java
+-C:\Users\MSI\Desktop\projet\Trading_wolfers\src\main\java\com\tradingdemo\model\Order.java
+-C:\Users\MSI\Desktop\projet\Trading_wolfers\src\main\java\com\tradingdemo\config\DatabaseConnection.java
+-C:\Users\MSI\Desktop\projet\Trading_wolfers\src\main\java\com\tradingdemo\model\Prediction.java
+-C:\Users\MSI\Desktop\projet\Trading_wolfers\src\main\java\com\tradingdemo\controller\HistoryController.java
+-C:\Users\MSI\Desktop\projet\Trading_wolfers\src\main\java\com\tradingdemo\controller\TradingController.java
+-C:\Users\MSI\Desktop\projet\Trading_wolfers\src\main\java\com\tradingdemo\controller\RegisterController.java
+-C:\Users\MSI\Desktop\projet\Trading_wolfers\src\main\java\TestHash.java
+-C:\Users\MSI\Desktop\projet\Trading_wolfers\src\main\java\com\tradingdemo\service\NewsService.java
+-C:\Users\MSI\Desktop\projet\Trading_wolfers\src\main\java\com\tradingdemo\util\AlertUtils.java
+-C:\Users\MSI\Desktop\projet\Trading_wolfers\src\main\java\com\tradingdemo\model\WalletItem.java
+-C:\Users\MSI\Desktop\projet\Trading_wolfers\src\main\java\com\tradingdemo\dao\ReclamationDAO.java
+-C:\Users\MSI\Desktop\projet\Trading_wolfers\src\main\java\com\tradingdemo\dao\PredictionDAO.java
+-C:\Users\MSI\Desktop\projet\Trading_wolfers\src\main\java\GenerateAdminHash.java
+-C:\Users\MSI\Desktop\projet\Trading_wolfers\src\main\java\com\tradingdemo\controller\resetController.java
+-C:\Users\MSI\Desktop\projet\Trading_wolfers\src\main\java\com\tradingdemo\dao\WalletDAO.java
+-C:\Users\MSI\Desktop\projet\Trading_wolfers\src\main\java\com\tradingdemo\service\WalletService.java
+-C:\Users\MSI\Desktop\projet\Trading_wolfers\src\main\java\com\tradingdemo\model\User.java
+-C:\Users\MSI\Desktop\projet\Trading_wolfers\src\main\java\com\tradingdemo\service\PredictionService.java
+-C:\Users\MSI\Desktop\projet\Trading_wolfers\src\main\java\com\tradingdemo\model\News.java
+-C:\Users\MSI\Desktop\projet\Trading_wolfers\src\main\java\com\tradingdemo\controller\DashboardController.java
+-C:\Users\MSI\Desktop\projet\Trading_wolfers\src\main\java\com\tradingdemo\service\TradingService.java
+-C:\Users\MSI\Desktop\projet\Trading_wolfers\src\main\java\com\tradingdemo\controller\LoginController.java
+-C:\Users\MSI\Desktop\projet\Trading_wolfers\src\main\java\com\tradingdemo\service\AuthService.java
++/home/g701943/Trading_wolfers/src/main/java/com/tradingdemo/service/BinanceApiService.java
++/home/g701943/Trading_wolfers/src/main/java/com/tradingdemo/controller/LoginController.java
++/home/g701943/Trading_wolfers/src/main/java/com/tradingdemo/controller/resetController.java
++/home/g701943/Trading_wolfers/src/main/java/com/tradingdemo/service/PredictionService.java
++/home/g701943/Trading_wolfers/src/main/java/com/tradingdemo/dao/UserDAO.java
++/home/g701943/Trading_wolfers/src/main/java/com/tradingdemo/model/Reclamation.java
++/home/g701943/Trading_wolfers/src/main/java/com/tradingdemo/service/CryptoPanicNewsService.java
++/home/g701943/Trading_wolfers/src/main/java/com/tradingdemo/util/AlertUtils.java
++/home/g701943/Trading_wolfers/src/main/java/com/tradingdemo/controller/DashboardController.java
++/home/g701943/Trading_wolfers/src/main/java/com/tradingdemo/service/CoinDeskNewsService.java
++/home/g701943/Trading_wolfers/src/main/java/com/tradingdemo/MainApp.java
++/home/g701943/Trading_wolfers/src/main/java/com/tradingdemo/model/Order.java
++/home/g701943/Trading_wolfers/src/main/java/com/tradingdemo/service/SentimentAnalysisService.java
++/home/g701943/Trading_wolfers/src/main/java/com/tradingdemo/model/Trade.java
++/home/g701943/Trading_wolfers/src/main/java/com/tradingdemo/util/PasswordUtils.java
++/home/g701943/Trading_wolfers/src/main/java/com/tradingdemo/config/DatabaseConnection.java
++/home/g701943/Trading_wolfers/src/main/java/com/tradingdemo/model/News.java
++/home/g701943/Trading_wolfers/src/main/java/com/tradingdemo/controller/HistoryController.java
++/home/g701943/Trading_wolfers/src/main/java/com/tradingdemo/service/WalletService.java
++/home/g701943/Trading_wolfers/src/main/java/com/tradingdemo/controller/WalletController.java
++/home/g701943/Trading_wolfers/src/main/java/com/tradingdemo/service/AuthService.java
++/home/g701943/Trading_wolfers/src/main/java/com/tradingdemo/dao/PredictionDAO.java
++/home/g701943/Trading_wolfers/src/main/java/TestHash.java
++/home/g701943/Trading_wolfers/src/main/java/com/tradingdemo/service/CryptoCompareNewsService.java
++/home/g701943/Trading_wolfers/src/main/java/com/tradingdemo/dao/NewsDAO.java
++/home/g701943/Trading_wolfers/src/main/java/com/tradingdemo/dao/ReclamationDAO.java
++/home/g701943/Trading_wolfers/src/main/java/com/tradingdemo/dao/WalletDAO.java
++/home/g701943/Trading_wolfers/src/main/java/com/tradingdemo/dao/OrderDAO.java
++/home/g701943/Trading_wolfers/src/main/java/com/tradingdemo/service/NewsService.java
++/home/g701943/Trading_wolfers/src/main/java/com/tradingdemo/model/User.java
++/home/g701943/Trading_wolfers/src/main/java/com/tradingdemo/controller/RegisterController.java
++/home/g701943/Trading_wolfers/src/main/java/com/tradingdemo/controller/AdminController.java
++/home/g701943/Trading_wolfers/src/main/java/com/tradingdemo/model/WalletItem.java
++/home/g701943/Trading_wolfers/src/main/java/com/tradingdemo/model/Prediction.java
++/home/g701943/Trading_wolfers/src/main/java/com/tradingdemo/service/AggregatedNewsService.java
++/home/g701943/Trading_wolfers/src/main/java/com/tradingdemo/dao/TradeDAO.java
++/home/g701943/Trading_wolfers/src/main/java/com/tradingdemo/controller/TradingController.java
++/home/g701943/Trading_wolfers/src/main/java/com/tradingdemo/service/TradingService.java
++/home/g701943/Trading_wolfers/src/main/java/com/tradingdemo/service/CoinTelegraphNewsService.java
++/home/g701943/Trading_wolfers/src/main/java/com/tradingdemo/controller/ProfilController.java
++/home/g701943/Trading_wolfers/src/main/java/GenerateAdminHash.java
++/home/g701943/Trading_wolfers/src/main/java/com/tradingdemo/controller/NewsController.java
