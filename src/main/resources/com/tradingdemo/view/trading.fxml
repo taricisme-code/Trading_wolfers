@@ -131,6 +131,7 @@
                         <Label text="Signal:" style="-fx-text-fill: #e0e0e0; -fx-font-size: 13;"/>
                         <Label fx:id="sentimentSignalLabel" text="BULLISH" style="-fx-text-fill: #16c784; -fx-font-size: 13; -fx-font-weight: bold;"/>
                     </HBox>
+                    <Label fx:id="sentimentReasoningLabel" wrapText="true" text="Short reasoning goes here..." style="-fx-text-fill: #e6eefc; -fx-font-size: 12; -fx-padding: 6 0 0 0;" />
                 </VBox>
                 
                 <!-- Quick Trade Panel -->

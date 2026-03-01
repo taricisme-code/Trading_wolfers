@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Button?>
+
+<ScrollPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tradingdemo.controller.PerformanceController">
+    <content>
+        <VBox spacing="12" style="-fx-padding: 20; -fx-background-color: #f8fafc;" alignment="TOP_CENTER">
+            <Label style="-fx-font-size:24; -fx-font-weight:bold;" text="Performance personnelle" />
+
+            <HBox spacing="20" style="-fx-padding: 10;">
+                <Label fx:id="totalTradesLabel" text="Total Trades: 0" />
+                <Label fx:id="winRateLabel" text="Win Rate: 0%" />
+                <Label fx:id="realizedPnlLabel" text="Realized P&amp;L: $0.00" />
+                <Label fx:id="avgProfitLabel" text="Avg P&amp;L/Trade: $0.00" />
+            </HBox>
+
+            <LineChart fx:id="equityChart" title="Equity Curve (Realized P&amp;L)" prefHeight="320" prefWidth="820">
+                <xAxis>
+                    <NumberAxis fx:id="xAxis" label="Trade #" />
+                </xAxis>
+                <yAxis>
+                    <NumberAxis fx:id="yAxis" label="Cumulative P&amp;L" />
+                </yAxis>
+            </LineChart>
+
+            <HBox spacing="8" alignment="CENTER">
+                <Button fx:id="refreshButton" text="Refresh" />
+                <Button fx:id="backButton" text="Back to Dashboard" />
+            </HBox>
+        </VBox>
+    </content>
+</ScrollPane>

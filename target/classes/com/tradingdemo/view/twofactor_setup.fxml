@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="TOP_CENTER" spacing="12" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tradingdemo.controller.TwoFactorController">
+    <padding>
+        <Insets top="12" right="12" bottom="12" left="12" />
+    </padding>
+
+    <Label style="-fx-font-size:18; -fx-font-weight:bold;" text="Two-Factor Authentication Setup" />
+
+    <ImageView fx:id="qrImageView" fitWidth="240" fitHeight="240" preserveRatio="true" />
+
+    <TextArea fx:id="instructionsArea" editable="false" wrapText="true" prefHeight="140" prefWidth="420" />
+
+    <HBox spacing="8" alignment="CENTER">
+        <Label text="Enter code:" />
+        <TextField fx:id="codeField" promptText="123456" />
+        <Button fx:id="enableButton" text="Enable" />
+        <Button fx:id="printButton" text="Print" />
+    </HBox>
+
+    <Label fx:id="statusLabel" style="-fx-text-fill: #ef4444; -fx-font-weight:bold;" />
+
+</VBox>

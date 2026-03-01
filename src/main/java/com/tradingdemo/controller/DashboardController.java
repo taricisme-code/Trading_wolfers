@@ -30,8 +30,11 @@ public class DashboardController {
     @FXML private Button walletButton;
     @FXML private Button historyButton;
     @FXML private Button newsButton;
+    @FXML private Button performanceButton;
+    @FXML private Button alertsButton;
     @FXML private Button logoutButton;
     @FXML private VBox adminBox;
+    @FXML private VBox alertsBox;
     @FXML private Button adminButton;
     @FXML private VBox tradingBox;
     @FXML private VBox walletBox;
@@ -43,6 +46,7 @@ public class DashboardController {
     private Button profilebutton;
 
     private final WalletService walletService = new WalletService();
+    private final com.tradingdemo.service.AlertService alertService = com.tradingdemo.service.AlertService.getInstance();
 
     @FXML
     public void initialize() {
@@ -75,6 +79,11 @@ public class DashboardController {
                     // Show admin panel button
                     adminBox.setVisible(true);
                     adminBox.setManaged(true);
+                    // Hide alerts for admin
+                    if (alertsBox != null) {
+                        alertsBox.setVisible(false);
+                        alertsBox.setManaged(false);
+                    }
                     adminButton.setOnAction(e -> navigateToAdmin());
                     
                     logoutButton.setOnAction(e -> handleLogout());
@@ -89,9 +98,18 @@ public class DashboardController {
                     tradingButton.setOnAction(e -> navigateToTrading());
                     walletButton.setOnAction(e -> navigateToWallet());
                     historyButton.setOnAction(e -> navigateToHistory());
+                    performanceButton.setOnAction(e -> navigateToPerformance());
+                    alertsButton.setOnAction(e -> navigateToAlerts());
                     newsButton.setOnAction(e -> navigateToNews());
                     profilebutton.setOnAction(e -> navigateToProfile());
                     logoutButton.setOnAction(e -> handleLogout());
+
+                    // start alert service for the user session
+                    try {
+                        alertService.start();
+                    } catch (Exception ex) {
+                        System.err.println("Failed to start AlertService: " + ex.getMessage());
+                    }
                     
                     // Show user navigation boxes
                     tradingBox.setVisible(true);
@@ -102,6 +120,11 @@ public class DashboardController {
                     historyBox.setManaged(true);
                     newsBox.setVisible(true);
                     newsBox.setManaged(true);
+                    // Ensure alerts box is visible for regular users
+                    if (alertsBox != null) {
+                        alertsBox.setVisible(true);
+                        alertsBox.setManaged(true);
+                    }
                     
                     // Hide admin panel button for regular users
                     adminBox.setVisible(false);
@@ -119,6 +142,9 @@ public class DashboardController {
             e.printStackTrace();
             AlertUtils.showError("Dashboard Error", "Error initializing dashboard: " + e.getMessage());
         }
+    }
+    private void navigateToAlerts() {
+        loadView("/com/tradingdemo/view/alerts.fxml", "Alerts");
     }
 
     private void updateBalance(int userId) {
@@ -180,6 +206,11 @@ public class DashboardController {
     @FXML
     private void navigateToNews() {
         loadView("/com/tradingdemo/view/news.fxml", "News");
+    }
+
+    @FXML
+    private void navigateToPerformance() {
+        loadView("/com/tradingdemo/view/performance.fxml", "Performance");
     }
 
     @FXML

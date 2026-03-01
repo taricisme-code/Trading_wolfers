@@ -13,6 +13,8 @@ public class User {
     private String phone;
     private String passwordHash;
     private double balance;
+    private boolean twoFactorEnabled;
+    private String twoFactorSecret;
     private boolean isAdmin;  // Admin flag
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -92,6 +94,22 @@ public class User {
 
     public void setPasswordHash(String passwordHash) {
         this.passwordHash = passwordHash;
+    }
+
+    public boolean isTwoFactorEnabled() {
+        return twoFactorEnabled;
+    }
+
+    public void setTwoFactorEnabled(boolean twoFactorEnabled) {
+        this.twoFactorEnabled = twoFactorEnabled;
+    }
+
+    public String getTwoFactorSecret() {
+        return twoFactorSecret;
+    }
+
+    public void setTwoFactorSecret(String twoFactorSecret) {
+        this.twoFactorSecret = twoFactorSecret;
     }
 
     public double getBalance() {

@@ -6,10 +6,12 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.ScrollPane?>
 
-<BorderPane style="-fx-background-color: #f8fafc;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tradingdemo.controller.DashboardController">
+<BorderPane style="-fx-background-color: #f8fafc;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tradingdemo.controller.DashboardController">
 
     <!-- Top Menu Bar -->
     <top>
@@ -17,7 +19,7 @@
             <Label text="🪙 Crypto Trading Platform" style="-fx-text-fill: #111827; -fx-font-size: 20; -fx-font-weight: bold;"/>
             <Label fx:id="welcomeLabel" style="-fx-text-fill: #111827; -fx-font-size: 14; -fx-padding: 0 0 0 20;" text="Welcome!" />
             <Label fx:id="portfolioLabel" style="-fx-text-fill: #111827; -fx-font-size: 13;" text="Portfolio: $1,000.00" />
-            <javafx.scene.layout.Region HBox.hgrow="ALWAYS"/>
+            <Region HBox.hgrow="ALWAYS"/>
             <Label fx:id="balanceLabel" style="-fx-text-fill: #16c784; -fx-font-size: 14; -fx-font-weight: bold;" text="Balance: $1,000.00" />
             <Button fx:id="logoutButton" style="-fx-padding: 10 20; -fx-background-color: #ea3943; -fx-text-fill: white; -fx-cursor: hand; -fx-border-radius: 8; -fx-background-radius: 8; -fx-font-size: 13; -fx-font-weight: bold;" text="Logout" />
         </HBox>
@@ -25,13 +27,15 @@
 
     <!-- Main Content -->
     <center>
-        <VBox spacing="30" style="-fx-padding: 40; -fx-alignment: center;">
+        <ScrollPane fitToWidth="true" pannable="true" style="-fx-background-color: transparent; -fx-padding: 0;">
+            <content>
+                <VBox spacing="30" style="-fx-padding: 40; -fx-alignment: center;">
 
-            <!-- Header -->
-            <Label style="-fx-text-fill: #111827; -fx-font-size: 32; -fx-font-weight: bold;" text="Dashboard" />
+                    <!-- Header -->
+                    <Label style="-fx-text-fill: #111827; -fx-font-size: 32; -fx-font-weight: bold;" text="Dashboard" />
 
-            <!-- Navigation Buttons Grid -->
-            <GridPane alignment="CENTER" hgap="25" style="-fx-padding: 20;" vgap="25">
+                    <!-- Navigation Buttons Grid -->
+                    <GridPane alignment="CENTER" hgap="25" style="-fx-padding: 20;" vgap="25">
 
                 <!-- Trading Button -->
                 <VBox fx:id="tradingBox" alignment="CENTER" spacing="12" style="-fx-border-color: #e5e7eb; -fx-border-radius: 12; -fx-background-radius: 12; -fx-padding: 35; -fx-background-color: white; -fx-cursor: hand; -fx-border-width: 1; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 10, 0, 0, 2);" GridPane.columnIndex="0" GridPane.rowIndex="0">
@@ -73,12 +77,28 @@
                     <Button fx:id="profilebutton" style="-fx-padding: 10 24; -fx-background-color: #3861fb; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand; -fx-border-radius: 8; -fx-background-radius: 8; -fx-font-size: 13;" text="Open" />
                 </VBox>
 
+                <!-- Performance Button -->
+                <VBox fx:id="performanceBox" alignment="CENTER" spacing="12" style="-fx-border-color: #e5e7eb; -fx-border-radius: 12; -fx-background-radius: 12; -fx-padding: 35; -fx-background-color: white; -fx-cursor: hand; -fx-border-width: 1; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 10, 0, 0, 2);" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                    <Label style="-fx-font-size: 48; -fx-text-fill: #16c784; -fx-font-weight: bold;" text="📈" />
+                    <Label style="-fx-text-fill: #111827; -fx-font-size: 18; -fx-font-weight: bold;" text="Performance" />
+                    <Label style="-fx-text-fill: #6b7280; -fx-font-size: 12;" text="Personal P&amp;L &amp; Metrics" />
+                    <Button fx:id="performanceButton" style="-fx-padding: 10 24; -fx-background-color: #16c784; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand; -fx-border-radius: 8; -fx-background-radius: 8; -fx-font-size: 13;" text="Open" />
+                </VBox>
+
                 <!-- Admin Button (conditionally shown) -->
                 <VBox fx:id="adminBox" alignment="CENTER" managed="false" spacing="12" style="-fx-border-color: #e5e7eb; -fx-border-radius: 12; -fx-background-radius: 12; -fx-padding: 35; -fx-background-color: white; -fx-cursor: hand; -fx-border-width: 1; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 10, 0, 0, 2);" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="1">
                     <Label style="-fx-font-size: 42;" text="⚙️" />
                     <Label style="-fx-text-fill: #ea3943; -fx-font-size: 18; -fx-font-weight: bold;" text="Admin Panel" />
                     <Label style="-fx-text-fill: #111827; -fx-font-size: 12;" text="Admin Controls" />
                     <Button fx:id="adminButton" style="-fx-padding: 10 24; -fx-background-color: #ea3943; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand; -fx-border-radius: 8; -fx-background-radius: 8; -fx-font-size: 13;" text="Open" />
+                </VBox>
+                
+                <!-- Alerts Button -->
+                <VBox fx:id="alertsBox" alignment="CENTER" spacing="12" style="-fx-border-color: #e5e7eb; -fx-border-radius: 12; -fx-background-radius: 12; -fx-padding: 35; -fx-background-color: white; -fx-cursor: hand; -fx-border-width: 1; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 10, 0, 0, 2);" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                    <Label style="-fx-font-size: 40; -fx-text-fill: #f59e0b;" text="🔔" />
+                    <Label style="-fx-text-fill: #111827; -fx-font-size: 14; -fx-font-weight: bold;" text="Alerts" />
+                    <Label style="-fx-text-fill: #6b7280; -fx-font-size: 12;" text="Price Alerts" />
+                    <Button fx:id="alertsButton" style="-fx-padding: 10 24; -fx-background-color: #f59e0b; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand; -fx-border-radius: 8; -fx-background-radius: 8; -fx-font-size: 13;" text="Open" />
                 </VBox>
             <columnConstraints>
                <ColumnConstraints />
@@ -92,5 +112,7 @@
             </rowConstraints>
             </GridPane>
         </VBox>
+            </content>
+        </ScrollPane>
     </center>
 </BorderPane>

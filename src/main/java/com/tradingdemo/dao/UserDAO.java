@@ -31,8 +31,8 @@ public class UserDAO {
      * @return true if successful, false otherwise
      */
     public boolean createUser(User user) {
-        String sql = "INSERT INTO users (first_name, last_name, email, phone, password_hash, balance, is_admin, created_at, updated_at) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO users (first_name, last_name, email, phone, password_hash, balance, is_admin, two_factor_enabled, two_factor_secret, created_at, updated_at) " +
+                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, user.getFirstName());
@@ -42,8 +42,10 @@ public class UserDAO {
             stmt.setString(5, user.getPasswordHash());
             stmt.setDouble(6, user.getBalance());
             stmt.setBoolean(7, user.isAdmin());
-            stmt.setTimestamp(8, Timestamp.valueOf(user.getCreatedAt()));
-            stmt.setTimestamp(9, Timestamp.valueOf(user.getUpdatedAt()));
+            stmt.setBoolean(8, user.isTwoFactorEnabled());
+            stmt.setString(9, user.getTwoFactorSecret());
+            stmt.setTimestamp(10, Timestamp.valueOf(user.getCreatedAt()));
+            stmt.setTimestamp(11, Timestamp.valueOf(user.getUpdatedAt()));
 
             int affectedRows = stmt.executeUpdate();
             if (affectedRows > 0) {
@@ -128,7 +130,7 @@ public class UserDAO {
      * @return true if successful, false otherwise
      */
     public boolean updateUser(User user) {
-        String sql = "UPDATE users SET first_name = ?, last_name = ?, email = ?, phone = ?, balance = ?, is_admin = ?, updated_at = ? WHERE id = ?";
+        String sql = "UPDATE users SET first_name = ?, last_name = ?, email = ?, phone = ?, balance = ?, is_admin = ?, two_factor_enabled = ?, two_factor_secret = ?, updated_at = ? WHERE id = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, user.getFirstName());
@@ -137,12 +139,30 @@ public class UserDAO {
             stmt.setString(4, user.getPhone());
             stmt.setDouble(5, user.getBalance());
             stmt.setBoolean(6, user.isAdmin());
-            stmt.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now()));
-            stmt.setInt(8, user.getId());
+            stmt.setBoolean(7, user.isTwoFactorEnabled());
+            stmt.setString(8, user.getTwoFactorSecret());
+            stmt.setTimestamp(9, Timestamp.valueOf(LocalDateTime.now()));
+            stmt.setInt(10, user.getId());
 
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             System.err.println("Error updating user: " + e.getMessage());
+        }
+        return false;
+    }
+
+    /**
+     * Update only the user's password hash
+     */
+    public boolean updatePassword(int userId, String newPasswordHash) {
+        String sql = "UPDATE users SET password_hash = ?, updated_at = ? WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, newPasswordHash);
+            stmt.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
+            stmt.setInt(3, userId);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error updating password: " + e.getMessage());
         }
         return false;
     }
@@ -209,6 +229,15 @@ public class UserDAO {
         user.setPasswordHash(rs.getString("password_hash"));
         user.setBalance(rs.getDouble("balance"));
         user.setAdmin(rs.getBoolean("is_admin"));
+        try {
+            user.setTwoFactorEnabled(rs.getBoolean("two_factor_enabled"));
+        } catch (SQLException ignore) {
+            // Column might not exist in older DBs
+        }
+        try {
+            user.setTwoFactorSecret(rs.getString("two_factor_secret"));
+        } catch (SQLException ignore) {
+        }
         
         Timestamp createdTs = rs.getTimestamp("created_at");
         if (createdTs != null) {

@@ -1,19 +1,32 @@
 package com.tradingdemo.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 import com.tradingdemo.service.AuthService;
 import com.tradingdemo.util.AlertUtils;
+import com.tradingdemo.util.QRCodeUtil;
+import com.tradingdemo.util.TOTPUtil;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.geometry.Pos;
 
 /**
  * RegisterController - Handles user registration functionality
@@ -76,8 +89,19 @@ public class RegisterController {
             // Attempt registration
             var user = authService.register(firstName, lastName, email, phone, password);
             if (user != null) {
-                System.out.println("DEBUG: Registration successful, loading dashboard...");
-                AlertUtils.showInfo("Success", "Account created successfully! Welcome " + firstName);
+                System.out.println("DEBUG: Registration successful for: " + user.getEmail());
+                // Start 2FA setup (generate secret + QR + verify)
+                try {
+                    boolean enabled = showTwoFactorSetup(user);
+                    if (enabled) {
+                        AlertUtils.showInfo("2FA Enabled", "Two-factor authentication has been enabled for your account.");
+                    } else {
+                        AlertUtils.showInfo("Registration Complete", "Account created. You can enable 2FA later in your profile.");
+                    }
+                } catch (Exception e) {
+                    System.err.println("ERROR during 2FA setup: " + e.getMessage());
+                }
+
                 loadDashboard();
             } else {
                 System.out.println("DEBUG: Registration failed");
@@ -88,6 +112,75 @@ public class RegisterController {
             e.printStackTrace();
             AlertUtils.showError("Registration Error", "An error occurred: " + e.getMessage());
         }
+    }
+
+    /**
+     * Show a dialog with QR code and prompt user to enter TOTP code to enable 2FA.
+     * Returns true if 2FA was enabled.
+     */
+    private boolean showTwoFactorSetup(com.tradingdemo.model.User user) throws Exception {
+        String secret = TOTPUtil.generateSecret();
+        String issuer = "TradingWolfers";
+        String account = user.getEmail();
+        String otpAuth = TOTPUtil.getOtpAuthURL(account, issuer, secret);
+
+        // Generate QR file
+        File qrFile = File.createTempFile("qrcode_", ".png");
+        qrFile.deleteOnExit();
+        QRCodeUtil.generateQRCodeImage(otpAuth, 250, 250, qrFile.getAbsolutePath());
+
+        // Build dialog with image and input
+        Dialog<String> dialog = new Dialog<>();
+        dialog.setTitle("Setup Two-Factor Authentication");
+        dialog.setHeaderText("Scan the QR with your authenticator app and enter the 6-digit code below");
+
+        ButtonType enableButtonType = new ButtonType("Enable", ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(enableButtonType, ButtonType.CANCEL);
+
+        ImageView imageView = new ImageView();
+        try (FileInputStream fis = new FileInputStream(qrFile)) {
+            Image image = new Image(fis);
+            imageView.setImage(image);
+            imageView.setFitWidth(200);
+            imageView.setFitHeight(200);
+            imageView.setPreserveRatio(true);
+        }
+
+        TextField codeField = new TextField();
+        codeField.setPromptText("123456");
+
+        VBox content = new VBox(10, imageView, new Label("Authentication code:"), codeField);
+        content.setAlignment(Pos.CENTER);
+        dialog.getDialogPane().setContent(content);
+
+        // Convert result
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == enableButtonType) {
+                return codeField.getText();
+            }
+            return null;
+        });
+
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()) {
+            String codeStr = result.get().trim();
+            try {
+                int code = Integer.parseInt(codeStr);
+                boolean ok = TOTPUtil.verifyCode(secret, code);
+                if (ok) {
+                    boolean updated = authService.enableTwoFactorForUser(user, secret);
+                    if (!updated) {
+                        System.err.println("Failed to persist 2FA settings for user: " + user.getEmail());
+                    }
+                    return updated;
+                } else {
+                    AlertUtils.showError("2FA Failed", "Invalid authentication code. 2FA not enabled.");
+                }
+            } catch (NumberFormatException nfe) {
+                AlertUtils.showError("Input Error", "Code must be numeric");
+            }
+        }
+        return false;
     }
 
     @FXML

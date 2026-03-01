@@ -4,14 +4,25 @@ import com.tradingdemo.dao.UserDAO;
 import com.tradingdemo.model.User;
 import com.tradingdemo.util.PasswordUtils;
 
+import java.util.Properties;
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
 /**
  * AuthService - Business logic for authentication and user registration
  * Handles user login, registration, and password verification
  */
 public class AuthService {
 
+    // SMTP configuration is now read from configuration (email.properties or env vars)
+    // The helper method below no longer hard-codes credentials.  Alternatively the
+    // code in initiatePasswordReset uses the NotifierFactory which already handles
+    // configuration.
+
     private final UserDAO userDAO;
     private static User currentUser;
+    private static IPInfoService.IPInfo sessionIPInfo;  // Current session IP info
 
     public AuthService() {
         this.userDAO = new UserDAO();
@@ -48,6 +59,47 @@ public class AuthService {
             e.printStackTrace();
             return null;
         }
+    }
+
+    /**
+     * Verifies a TOTP code for a user whose 2FA is enabled
+     * @param user the user
+     * @param code the 6-digit TOTP code
+     * @return true if valid, false otherwise
+     */
+    public boolean verifyTwoFactor(User user, int code) {
+        try {
+            if (user == null || user.getTwoFactorSecret() == null) return false;
+            return com.tradingdemo.util.TOTPUtil.verifyCode(user.getTwoFactorSecret(), code);
+        } catch (Exception e) {
+            System.err.println("ERROR verifying 2FA: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Enables two-factor authentication for a user by saving the provided secret
+     * @param user the user to update
+     * @param secret the Base32 secret to store
+     * @return true if update succeeded
+     */
+    public boolean enableTwoFactorForUser(User user, String secret) {
+        if (user == null || secret == null) return false;
+        user.setTwoFactorSecret(secret);
+        user.setTwoFactorEnabled(true);
+        return userDAO.updateUser(user);
+    }
+
+    /**
+     * Disables two-factor authentication for a user (removes secret)
+     * @param user the user to update
+     * @return true if update succeeded
+     */
+    public boolean disableTwoFactorForUser(User user) {
+        if (user == null) return false;
+        user.setTwoFactorSecret(null);
+        user.setTwoFactorEnabled(false);
+        return userDAO.updateUser(user);
     }
 
     /**
@@ -98,6 +150,22 @@ public class AuthService {
     }
 
     /**
+     * Gets the current session's IP information
+     * @return IPInfo with location details or null if not available
+     */
+    public static IPInfoService.IPInfo getSessionIPInfo() {
+        return sessionIPInfo;
+    }
+
+    /**
+     * Sets the current session's IP information
+     * @param ipInfo The IP information to store
+     */
+    public static void setSessionIPInfo(IPInfoService.IPInfo ipInfo) {
+        sessionIPInfo = ipInfo;
+    }
+
+    /**
      * Sets the current user (for session management)
      * @param user The user to set as current
      */
@@ -124,11 +192,65 @@ public class AuthService {
         
         if (user != null && PasswordUtils.verifyPassword(oldPassword, user.getPasswordHash())) {
             String hashedPassword = PasswordUtils.hashPassword(newPassword);
-            user.setPasswordHash(hashedPassword);
-            return userDAO.updateUser(user);
+            return userDAO.updatePassword(userId, hashedPassword);
         }
         
         return false;
+    }
+
+    /**
+     * Initiate a password reset by creating a reset token and sending it to the user's email.
+     */
+    public boolean initiatePasswordReset(String email) {
+        try {
+            User user = userDAO.getUserByEmail(email);
+            if (user == null) return false;
+            // generate 6-digit numeric code
+            String code = String.format("%06d", (int) (Math.random() * 900000) + 100000);
+            com.tradingdemo.dao.PasswordResetDAO prDao = new com.tradingdemo.dao.PasswordResetDAO();
+            boolean created = prDao.createResetToken(user.getId(), code);
+            if (!created) return false;
+            // send email using the configured notifier instead of hard-coded helper
+            try {
+                var notifier = com.tradingdemo.notification.NotifierFactory.getNotifier();
+                String subject = "Password reset code";
+                String body = String.format("Your password reset code is: %s\nIt will expire in 15 minutes.", code);
+                notifier.sendEmail(user.getEmail(), subject, body);
+            } catch (Exception ex) {
+                System.err.println("Failed to send reset email: " + ex.getMessage());
+            }
+            return true;
+        } catch (Exception e) {
+            System.err.println("Error initiating password reset: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Reset a user's password using a previously generated reset code.
+     */
+    // Removed hard-coded helper; notifier pattern now handles email sending.  If
+    // you need to construct messages manually you can still obtain configuration via
+    // EmailConfig or call NotifierFactory as above.
+    //
+    // private void sendResetEmail(String to, String code) throws Exception { ... }
+    // (method deleted)
+
+    public boolean resetPasswordWithCode(String email, String code, String newPassword) {
+        try {
+            User user = userDAO.getUserByEmail(email);
+            if (user == null) return false;
+            com.tradingdemo.dao.PasswordResetDAO prDao = new com.tradingdemo.dao.PasswordResetDAO();
+            boolean valid = prDao.verifyTokenForUser(user.getId(), code);
+            if (!valid) return false;
+            String hashed = PasswordUtils.hashPassword(newPassword);
+            boolean ok = userDAO.updatePassword(user.getId(), hashed);
+            if (ok) prDao.consumeToken(user.getId(), code);
+            return ok;
+        } catch (Exception e) {
+            System.err.println("Error resetting password: " + e.getMessage());
+            return false;
+        }
     }
 
     /**

@@ -31,7 +31,10 @@
         <!-- Password Field -->
         <VBox spacing="8" style="-fx-pref-width: 100%;">
             <Label text="Password" style="-fx-text-fill: #374151; -fx-font-size: 13; -fx-font-weight: bold;"/>
-            <PasswordField fx:id="passwordField" promptText="Enter your password" style="-fx-padding: 12; -fx-font-size: 14; -fx-text-fill: #111827; -fx-background-color: #f9fafb; -fx-border-color: #e5e7eb; -fx-border-radius: 8; -fx-background-radius: 8; -fx-border-width: 1;"/>
+            <HBox spacing="8" alignment="CENTER_RIGHT" style="-fx-pref-width:100%;">
+                <PasswordField fx:id="passwordField" promptText="Enter your password" HBox.hgrow="ALWAYS" style="-fx-padding: 12; -fx-font-size: 14; -fx-text-fill: #111827; -fx-background-color: #f9fafb; -fx-border-color: #e5e7eb; -fx-border-radius: 8; -fx-background-radius: 8; -fx-border-width: 1;"/>
+                <Button text="Forgot?" fx:id="forgotBtn" />
+            </HBox>
         </VBox>
 
         <!-- Login Button -->

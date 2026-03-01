@@ -16,6 +16,8 @@ CREATE TABLE `users` (
   `password_hash` VARCHAR(255) NOT NULL,
   `balance` DOUBLE NOT NULL DEFAULT 1000.0,
   `is_admin` BOOLEAN NOT NULL DEFAULT FALSE,
+  `two_factor_enabled` BOOLEAN NOT NULL DEFAULT FALSE,
+  `two_factor_secret` VARCHAR(255) DEFAULT NULL,
   `created_at` DATETIME NOT NULL,
   `updated_at` DATETIME
 ) ENGINE=InnoDB;
@@ -93,6 +95,32 @@ CREATE TABLE `reclamations` (
   `updated_at` DATETIME,
   KEY `idx_recls_user` (`user_id`),
   CONSTRAINT `fk_recls_user` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
+-- Alerts table for price notifications
+CREATE TABLE `alerts` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `user_id` INT NOT NULL,
+  `symbol` VARCHAR(20) NOT NULL,
+  `target_price` DOUBLE NOT NULL,
+  `notify_when_above` BOOLEAN NOT NULL DEFAULT TRUE,
+  `enabled` BOOLEAN NOT NULL DEFAULT TRUE,
+  `notify_email` BOOLEAN NOT NULL DEFAULT TRUE,
+  `notify_sms` BOOLEAN NOT NULL DEFAULT FALSE,
+  `created_at` DATETIME NOT NULL,
+  KEY `idx_alerts_user` (`user_id`),
+  CONSTRAINT `fk_alerts_user` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
+-- Password reset codes for 'forgot password' flow
+CREATE TABLE `password_resets` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `user_id` INT NOT NULL,
+  `token` VARCHAR(100) NOT NULL,
+  `expires_at` DATETIME NOT NULL,
+  `created_at` DATETIME NOT NULL,
+  KEY `idx_pr_user` (`user_id`),
+  CONSTRAINT `fk_pr_user` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
 -- Optional seed data (no users pre-seeded to let you register from the app)
